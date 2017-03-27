@@ -20,13 +20,23 @@ The game follows these simple rules:
 
 ### Functionality & MVP
 
-With this version of Pacxon, users will be able to:
+With my version of Pacxon, these capabilities will be implemented:
 
-- [ ] start, pause, and reset the game board
-- [ ] view a top bar, which holds information about their lives and percentage of the game grid taken up with blocks
-- [ ] 
+- [ ] Users will be able to start, pause, and reset the game board.
+- [ ] A top bar will hold information about number of lives left and the percentage of the game grid taken up with blocks.
+- [ ] The Pacman character will be able to move and create filled in blocks.
+- [ ] Three types of ghosts will have varying capabilities (e.g., different velocities, removing blocks) to create different types of challenges for users.
+
+This project will also include:
+
+- [ ] a production readme
+- [ ] an instructions section describing the rules of the game
 
 ### Wireframes
+
+This app will include a single screen with the game board, game controls (start, pause reset), instructions section, and links to my Pacxon Github and my LinkedIn profile. Above the game grid will show the number of lives left, and the progress made (i.e., percentage of the game grid taken up).
+
+![Pacxon wireframe](docs/pacxon.png)
 
 ### Architecture & Technologies
 
