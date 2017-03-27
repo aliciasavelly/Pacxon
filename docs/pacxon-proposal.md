@@ -36,7 +36,7 @@ This project will also include:
 
 This app will include a single screen with the game board, game controls (start, pause reset), instructions section, and links to my Pacxon Github and my LinkedIn profile. Above the game grid will show the number of lives left, and the progress made (i.e., percentage of the game grid taken up).
 
-![Pacxon wireframe](docs/pacxon.png)
+![Pacxon wireframe](wireframes/pacxon.png)
 
 ### Architecture & Technologies
 
