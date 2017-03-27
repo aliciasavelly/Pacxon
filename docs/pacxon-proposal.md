@@ -29,8 +29,8 @@ With my version of Pacxon, these capabilities will be implemented:
 
 This project will also include:
 
-- [ ] a production readme
-- [ ] an instructions section describing the rules of the game
+- [ ] a production readme,
+- [ ] and an instructions section describing the rules of the game.
 
 ### Wireframes
 
