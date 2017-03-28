@@ -59,15 +59,23 @@
       }
 
       function squareClick(e) {
-        console.log("hi");
+        let current = squares[e.target.x + "_" + e.target.y];
+        if (current.blocked === true) {
+          current.graphics.beginFill("#1D9C73").drawRect(0, 0, 17, 17);
+          current.blocked = false;
+        } else {
+          current.graphics.beginFill("blue").drawRect(0, 0, 17, 17);
+          current.blocked = true;
+        }
+        // console.log("hi");
+
         // console.log(e.target.x);
-        console.log(squares);
+        // console.log(squares);
         // console.log(selected);
         // selected = {
         //   x: e.target.x,
         //   y: e.target.y
         // };
-        let current = squares[e.target.x + "_" + e.target.y];
         // current.graphics.beginFill("blue").drawRect(0, 0, 17, 17);
         // console.log(current.alpha);
         // console.log(current);
@@ -78,10 +86,8 @@
         // console.log(e.target.x);
         // console.log(squares);
         // let current = squares[e.target.x + "_" + e.target.y];
-        current.graphics.beginFill("blue").drawRect(0, 0, 17, 17);
-        console.log(current.blocked);
-        current.blocked = true;
-        console.log(current.blocked);
+
+        // console.log(current.blocked);
         // console.log("here");
         stage.update();
       }
