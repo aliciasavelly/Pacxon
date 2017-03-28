@@ -1,3 +1,20 @@
-body {
+.page-container {
   background: white;
+  display: flex;
+  justify-content: center;
+  /*flex-direction: column;*/
+  /*align-content: center;*/
+}
+
+h1 {
+  /*box-sizing: border-box;*/
+  width: 100px;
+  /*margin: 0;*/
+  /*padding: 0;*/
+  margin: 0 auto;
+}
+
+.canvas-div {
+  width: 578px;
+  height: 391px;
 }

@@ -9,26 +9,30 @@
       function init() {
         stage = new createjs.Stage("game-canvas");
         square = new createjs.Shape();
-        border = new createjs.Shape();
-        // border.graphics.beginFill("blue").drawRect(0, 0, 100, 100);
         square.graphics.beginFill("green").drawRect(0, 0, 40, 40);
-        // stage.drawRect(null);
         square.y = 50;
         stage.addChild(square);
-        // border.graphics.beginStroke("#000");
-        // border.graphics.setStrokeStyle(1);
-        // border.snapToPixel = true;
-        // border.graphics.drawRect(0, 0, 550, 370);
-        stageWidth = stage.width;
-        stageHeight = stage.height;
-        border.x = stageWidth / 2 - 200 - 0.5;
-        border.y = stageHeight / 2 - 150 - 0.5;
-        stage.addChild(border);
 
+        let pacman = new Image();
+        pacman.src = "Pacman.png";
+        pacman.onload = handleImageLoad;
         createjs.Ticker.on("tick", tick);
         createjs.Ticker.setFPS(30);
         generateGrid();
       }
+
+      function handleImageLoad(event) {
+        let image = event.target;
+        let bitmap = new createjs.Bitmap(image);
+        bitmap.scaleX = 0.0071;
+        bitmap.scaleY = 0.0071;
+        bitmap.x = 1;
+        bitmap.y = 1;
+        stage.addChild(bitmap);
+        stage.update();
+      }
+
+      let squares = [];
 
       function generateGrid() {
         let gridSquare;
@@ -37,13 +41,48 @@
             gridSquare = new createjs.Shape();
             gridSquare.graphics.beginStroke("#000");
             gridSquare.graphics.setStrokeStyle(1);
+            // gridSquare.shadow = new createjs.Shadow("#000000", 3, 3, 3);
+            // gridSquare.shadow = new createjs.Shadow("#000000", 10, 10, 10);
             gridSquare.snapToPixel = true;
-            gridSquare.graphics.drawRect(0, 0, 17, 17);
+            gridSquare.graphics.beginFill("#1D9C73").drawRect(0, 0, 17, 17);
             gridSquare.x = x * 17;
             gridSquare.y = y * 17;
+            gridSquare.blocked = false;
+            gridSquare.addEventListener("click", squareClick);
             stage.addChild(gridSquare);
+
+            let id = gridSquare.x + "_" + gridSquare.y
+            squares[id] = gridSquare;
           }
         }
+        stage.update();
+      }
+
+      function squareClick(e) {
+        console.log("hi");
+        // console.log(e.target.x);
+        console.log(squares);
+        // console.log(selected);
+        // selected = {
+        //   x: e.target.x,
+        //   y: e.target.y
+        // };
+        let current = squares[e.target.x + "_" + e.target.y];
+        // current.graphics.beginFill("blue").drawRect(0, 0, 17, 17);
+        // console.log(current.alpha);
+        // console.log(current);
+        // console.log(current.alpha);
+        // current.alpha = 0;
+        // console.log(current.alpha);
+        // console.log("clicked");
+        // console.log(e.target.x);
+        // console.log(squares);
+        // let current = squares[e.target.x + "_" + e.target.y];
+        current.graphics.beginFill("blue").drawRect(0, 0, 17, 17);
+        console.log(current.blocked);
+        current.blocked = true;
+        console.log(current.blocked);
+        // console.log("here");
         stage.update();
       }
 
@@ -56,8 +95,13 @@
   </head>
   <body onload="init();" style="background-color: white">
     <h1>Pacxon</h1>
-    <canvas id="game-canvas" width="578" height="391" style="background-color: #1D9C73">
-      canvas content
-    </canvas>
+    <div class="page-container">
+
+      <div class="canvas-div">
+        <canvas id="game-canvas" width="578" height="391" style="background-color: blue">
+          canvas content
+        </canvas>
+      </div>
+    </div>
   </body>
 </html>
