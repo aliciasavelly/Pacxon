@@ -15,10 +15,10 @@
         // stage.drawRect(null);
         square.y = 50;
         stage.addChild(square);
-        border.graphics.beginStroke("#000");
-        border.graphics.setStrokeStyle(1);
-        border.snapToPixel = true;
-        border.graphics.drawRect(0, 0, 550, 370);
+        // border.graphics.beginStroke("#000");
+        // border.graphics.setStrokeStyle(1);
+        // border.snapToPixel = true;
+        // border.graphics.drawRect(0, 0, 550, 370);
         stageWidth = stage.width;
         stageHeight = stage.height;
         border.x = stageWidth / 2 - 200 - 0.5;
@@ -54,9 +54,9 @@
       }
     </script>
   </head>
-  <body onload="init();">
+  <body onload="init();" style="background-color: white">
     <h1>Pacxon</h1>
-    <canvas id="game-canvas" width="540" height="360" style="background-color: #1D9C73">
+    <canvas id="game-canvas" width="578" height="391" style="background-color: #1D9C73">
       canvas content
     </canvas>
   </body>
