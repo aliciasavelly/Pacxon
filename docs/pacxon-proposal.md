@@ -55,19 +55,27 @@ The ```pacxon.js``` script will handle the logic for how the various pieces are 
 
 ### Implementation Timeline
 
+#### Phase 1: Webpack & Easel.js Setup
+
 **Day 1:** Finish all the necessary setup, including webpack, and ```Easel.js```. Write the basic files and set up the file structure of the project. Learn more about using ```Easel.js```. Goals for the day:
 
 * Get webpack up and running
 * Learn enough about ```Easel.js``` to render an object to the ```Canvas``` element
+
+#### Phase 2: Grid Rendering & Block Toggling
 
 **Day 2:** Learn more about rendering objects to the canvas. Goals for the day:
 
 * Render the Pacxon grid to the canvas
 * Be able to toggle the grid blocks between showing and not showing
 
+#### Phase 3: Pacman & Ghost Movement
+
 **Day 3:** Create the logic for the movement of the Pacman character and for the ghosts. Goals for the day:
 
 * Render character objects on the grid with proper movement
+
+#### Phase 4: Pacman Block Creation & Finishing Touches
 
 **Day 4:** Create the logic for the block creation that the Pacman character creates. Goals for the day:
 
@@ -75,6 +83,13 @@ The ```pacxon.js``` script will handle the logic for how the various pieces are 
 * Have controls for Pacman movement
 * Have proper buttons for start, pause, reset
 * Have blocks rendering based on Pacman movement, which in turn affects where the ghosts can move
+
+### Checklist:
+
+- [x] Phase 1
+- [ ] Phase 2
+- [ ] Phase 3
+- [ ] Phase 4
 
 ### Bonus Features
 
