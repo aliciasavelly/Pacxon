@@ -8,24 +8,37 @@
     <script>
       function init() {
         stage = new createjs.Stage("game-canvas");
-        circle = new createjs.Shape();
-        circle.graphics.beginFill("green").drawCircle(0, 0, 40);
-        circle.y = 50;
-        stage.addChild(circle);
+        square = new createjs.Shape();
+        border = new createjs.Shape();
+        // border.graphics.beginFill("blue").drawRect(0, 0, 100, 100);
+        square.graphics.beginFill("green").drawRect(0, 0, 40, 40);
+        // stage.drawRect(null);
+        square.y = 50;
+        stage.addChild(square);
+        border.graphics.beginStroke("#000");
+        border.graphics.setStrokeStyle(1);
+        border.snapToPixel = true;
+        border.graphics.drawRect(0, 0, 550, 370);
+        stageWidth = stage.width;
+        stageHeight = stage.height;
+        border.x = stageWidth / 2 - 200 - 0.5;
+        border.y = stageHeight / 2 - 150 - 0.5;
+        stage.addChild(border);
 
         createjs.Ticker.on("tick", tick);
         createjs.Ticker.setFPS(30);
       }
 
       function tick(event) {
-        circle.x = circle.x + 1;
-        if(circle.x > stage.canvas.width) { circle.x = 0; }
+        square.x = square.x + 1;
+        if(square.x > stage.canvas.width) { square.x = 0; }
         stage.update(event);
       }
     </script>
   </head>
   <body onload="init();">
-    <canvas id="game-canvas" width="500" height="100">
+    <h1>Pacxon</h1>
+    <canvas id="game-canvas" width="550" height="370">
       canvas content
     </canvas>
   </body>
