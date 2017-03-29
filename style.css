@@ -17,4 +17,10 @@ h1 {
 .canvas-div {
   width: 578px;
   height: 391px;
+  /*background-image: url("/lib/assets/space.png");*/
+}
+
+canvas {
+  background-image: url("/lib/assets/purple_space.jpeg");
+  background-size: 578px 391px;
 }
