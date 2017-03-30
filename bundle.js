@@ -77,6 +77,12 @@ class GameView {
     this.squares = {};
     this.ghosts = [];
 
+    // $(window).keypress(console.log("keypressed"));
+    $( "body" ).keydown(function() {
+      console.log( "key pressed" );
+
+    });
+
     this.squareClick = this.squareClick.bind(this);
     this.setup = this.setup.bind(this);
     this.handleImageLoadPacman = this.handleImageLoadPacman.bind(this);
@@ -90,11 +96,6 @@ class GameView {
   }
 
   tick(event) {
-    // console.log("hi");
-    // console.log(event.delta/1000*100);
-    // console.log(this.red_ghost);
-    // console.log(this.red_ghost.x);
-    // console.log(this.ghosts[0].x);
     if (this.ghosts[0]) {
       this.ghosts.forEach( ghost => {
         // console.log(ghost.xVel);
@@ -134,7 +135,7 @@ class GameView {
       // console.log(this.squares[key].blocked === true);
       // console.log(this.squares);
       let pt = this.squares[key].globalToLocal(ghost.x, ghost.y);
-      if (this.squares[key].blocked === true && (this.squares[key].hitTest(pt.x, pt.y) || (this.squares[key].hitTest(pt.x + 16, pt.y + 16)))) {
+      if (this.squares[key].blocked === true && (this.squares[key].hitTest(pt.x, pt.y) || (this.squares[key].hitTest(pt.x + 15, pt.y + 15)))) {
         let xVel = ghost.xVel;
         let yVel = ghost.yVel;
         ghost.xVel = yVel;
@@ -188,6 +189,7 @@ class GameView {
     bitmap.x = 1;
     bitmap.y = 1;
     this.stage.addChild(bitmap);
+    this.pacman = bitmap;
     this.stage.update();
   }
 
@@ -207,8 +209,8 @@ class GameView {
 
     this.ghosts.push(bitmap);
     this.ghosts.forEach( ghost => {
-      ghost.xVel = 1;
-      ghost.yVel = 1;
+      ghost.xVel = 2;
+      ghost.yVel = 2;
       // debugger;
       // console.log(this.ghosts[0].x);
     })
@@ -284,74 +286,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 document.addEventListener("DOMContentLoaded", function(e) {
   let stage = new createjs.Stage("game-canvas");
   new __WEBPACK_IMPORTED_MODULE_0__lib_game_view_js__["a" /* default */](stage);
-  // square = new createjs.Shape();
-  // square.graphics.beginFill("green").drawRect(0, 0, 40, 40);
-  // square.y = 50;
-  // stage.addChild(square);
-  //
-  // let pacman = new Image();
-  // pacman.src = "/lib/assets/Pacman.png";
-  // pacman.onload = handleImageLoad;
-  // createjs.Ticker.on("tick", tick);
-  // createjs.Ticker.setFPS(30);
-  // generateGrid();
 });
-
-// function handleImageLoad(event) {
-//   let image = event.target;
-//   // debugger;
-//   let bitmap = new createjs.Bitmap(image);
-//   bitmap.scaleX = 0.0071;
-//   bitmap.scaleY = 0.0071;
-//   bitmap.x = 1;
-//   bitmap.y = 1;
-//   stage.addChild(bitmap);
-//   stage.update();
-// }
-//
-// let squares = [];
-//
-// function generateGrid() {
-//   let gridSquare;
-//   for (let x = 0; x < 34; x ++) {
-//     for (let y = 0; y < 23; y++) {
-//       gridSquare = new createjs.Shape();
-//       gridSquare.graphics.beginStroke("#000");
-//       gridSquare.graphics.setStrokeStyle(1);
-//       // gridSquare.shadow = new createjs.Shadow("#000000", 3, 3, 3);
-//       // gridSquare.shadow = new createjs.Shadow("#000000", 10, 10, 10);
-//       gridSquare.snapToPixel = true;
-//       gridSquare.graphics.beginFill("#1D9C73").drawRect(0, 0, 17, 17);
-//       gridSquare.x = x * 17;
-//       gridSquare.y = y * 17;
-//       gridSquare.blocked = false;
-//       gridSquare.addEventListener("click", squareClick);
-//       stage.addChild(gridSquare);
-//
-//       let id = gridSquare.x + "_" + gridSquare.y
-//       squares[id] = gridSquare;
-//     }
-//   }
-//   stage.update();
-// }
-//
-// function squareClick(e) {
-//   let current = squares[e.target.x + "_" + e.target.y];
-//   if (current.blocked === true) {
-//     current.graphics.beginFill("#1D9C73").drawRect(0, 0, 17, 17);
-//     current.blocked = false;
-//   } else {
-//     current.graphics.beginFill("blue").drawRect(0, 0, 17, 17);
-//     current.blocked = true;
-//   }
-//   stage.update();
-// }
-//
-// function tick(event) {
-//   square.x = square.x + 1;
-//   if(square.x > stage.canvas.width) { square.x = 0; }
-//   stage.update(event);
-// }
 
 
 /***/ })
