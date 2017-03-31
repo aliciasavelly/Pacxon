@@ -76,21 +76,10 @@ class GameView {
     this.stage = stage;
     this.squares = {};
     this.ghosts = [];
-    this.lives = 3;
-    // this.collisionMethod = ndgmr.checkPixelCollision;
-    // if ( this.collisionMethod == ndgmr.checkPixelCollision ) {
-    //   this.collisionMethod = ndgmr.checkRectCollision;
-    // } else {
-    //   this.collisionMethod = ndgmr.checkRectCollision;
-    // }
-    // debugger;
+    this.lives = 2;
+    this.percent = 0;
 
     let body = document.getElementById("body");
-    // body.addEventListener("keydown", function() {
-    //   debugger;
-    //   console.log("key pressed");
-    // }).bind(this);
-    // debugger;
 
     this.squareClick = this.squareClick.bind(this);
     this.setup = this.setup.bind(this);
@@ -109,31 +98,24 @@ class GameView {
   tick(event) {
     if (this.ghosts[0]) {
       this.ghosts.forEach( ghost => {
-        // console.log(ghost.xVel);
-        // debugger;
         ghost.x += ghost.xVel;
         ghost.y += ghost.yVel;
-        // console.log(this.ghosts[0].x);
         this.testCollision(ghost);
       })
     }
     this.testPacmanCollision(this.pacman);
     this.stage.update();
-    // this.pacman.x += event.delta/1000*100;
   }
 
   testCollision(ghost) {
-    // debugger;
     if (
       ghost.x < this.pacman.x + this.pacman.size &&
       ghost.x + ghost.size > this.pacman.x &&
       ghost.y < this.pacman.y + this.pacman.size &&
       ghost.y + ghost.size > this.pacman.y
     ) {
-      this.lives -= 1;
-      // debugger;
+      // this.lives -= 1;
       document.getElementById("lives").innerHTML = `Lives: ${this.lives}`;
-      // console.log(this.lives);
       if (this.lives < 0) {
         document.getElementById("lives").innerHTML = "You lost the level. Try again!";
         this.setup();
@@ -142,8 +124,6 @@ class GameView {
       this.pacman.y = 1;
     }
     for (let key in this.squares) {
-      // debugger;
-      // square = this.squares[key];
       if (
         this.squares[key].blocked === true &&
         ghost.x < this.squares[key].x + this.squares[key].size &&
@@ -155,43 +135,7 @@ class GameView {
         let yVel = ghost.yVel;
         ghost.xVel = yVel;
         ghost.yVel = xVel * -1;
-        // ghost.x = 30;
-        // ghost.y = 30;
       }
-
-
-      // let intersection = this.collisionMethod(ghost, this.squares[key], 1);
-      // // debugger;
-      // if (this.squares[key].blocked === true && intersection) {
-      //   // debugger;
-      //   let xVel = ghost.xVel;
-      //   let yVel = ghost.yVel;
-      //   ghost.xVel = yVel;
-      //   ghost.yVel = xVel * -1;
-      // }
-      // let pt = this.squares[key].globalToLocal(ghost.x, ghost.y);
-      // let pt2 = this.squares[key].globalToLocal(ghost.x + 17, ghost.y + 17);
-      // let pt3 = this.squares[key].globalToLocal(ghost.x + 17, ghost.y);
-      // let pt4 = this.squares[key].globalToLocal(ghost.x, ghost.y + 17);
-      // let pt5 = this.squares[key].globalToLocal(ghost.x + 9, ghost.y);
-      // let pt6 = this.squares[key].globalToLocal(ghost.x + 17, ghost.y + 9);
-      // let pt7 = this.squares[key].globalToLocal(ghost.x + 9, ghost.y + 17);
-      // let pt8 = this.squares[key].globalToLocal(ghost.x, ghost.y + 9);
-      // debugger;
-      // if ( this.squares[key].blocked === true && (this.squares[key].hitTest(pt.x, pt.y) || this.squares[key].hitTest(pt2.x, pt2.y)  ) ) {
-      //   if (this.squares[key].hitTest(pt4.x, pt4.y)) {
-      //     console.log("pt4");
-      //     let xVel = ghost.xVel;
-      //     let yVel = ghost.yVel;
-      //     ghost.xVel = yVel * -1;
-      //     ghost.yVel = xVel * -1;
-      //   } else {
-      //     let xVel = ghost.xVel;
-      //     let yVel = ghost.yVel;
-      //     ghost.xVel = yVel;
-      //     ghost.yVel = xVel * -1;
-      //   }
-      // }
     }
   }
 
@@ -201,18 +145,19 @@ class GameView {
       if ( this.squares[key].blocked === false && this.squares[key].hitTest(pt.x, pt.y) ) {
         this.squares[key].blocked = true;
         this.squares[key].graphics.beginFill("blue").drawRect(0, 0, 17, 17);
-
-        // console.log(this.squares[key].blocked);
+        this.percent += .18;
+        document.getElementById("percent").innerHTML = `Progress: ${Math.floor(this.percent)}/75%`
+        if (Math.floor(this.percent) >= 10 ) {
+          document.getElementById("lives").innerHTML = "You won the level!"
+          this.setup();
+          this.percent = 0;
+          document.getElementById("percent").innerHTML = `Progress: ${Math.floor(this.percent)}/75%`
+        }
       }
     }
   }
 
   setup() {
-    // let square = new createjs.Shape();
-    // square.graphics.beginFill("green").drawRect(0, 0, 40, 40);
-    // square.y = 50;
-    // this.stage.addChild(square);
-
     this.pacmanImage = new Image();
     this.pacmanImage.src = "./lib/assets/Pacman.png";
     this.pacmanImage.onload = this.handleImageLoadPacman;
@@ -239,8 +184,6 @@ class GameView {
   }
 
   handleKeydown(event) {
-    // debugger;
-    // console.log(event.keyCode);
     if (event.key === "ArrowUp" && this.pacman.y >= 17) {
       this.pacman.y -= 17;
     } else if (event.key === "ArrowDown" && this.pacman.y <= 374) {
@@ -263,12 +206,8 @@ class GameView {
     this.stage.addChild(bitmap);
     this.stage.update();
     this.pacman = bitmap;
-    // debugger;
     $(document).keydown(function(e) {
-      // debugger;
-      // console.log(this);
       if (e.key === "ArrowDown") {
-        // console.log(e.key);
         e.preventDefault();
       }
       this.handleKeydown(e);
@@ -281,8 +220,6 @@ class GameView {
     let bitmap = new createjs.Bitmap(image);
     bitmap.scaleX = 0.05;
     bitmap.scaleY = 0.05;
-    // bitmap.x = 600 * Math.random();
-    // bitmap.y = 400 * Math.random();
     while (bitmap.y > 355 || bitmap.y < 20) {
       bitmap.y = 400 * Math.random();
     }
@@ -295,8 +232,6 @@ class GameView {
       ghost.xVel = 4;
       ghost.yVel = 4;
       ghost.size = 17;
-      // debugger;
-      // console.log(this.ghosts[0].x);
     })
 
     this.stage.addChild(bitmap);
@@ -310,10 +245,7 @@ class GameView {
         gridSquare = new createjs.Shape();
         gridSquare.graphics.beginStroke("#000");
         gridSquare.graphics.setStrokeStyle(1);
-        // gridSquare.shadow = new createjs.Shadow("#000000", 3, 3, 3);
-        // gridSquare.shadow = new createjs.Shadow("#000000", 10, 10, 10);
         gridSquare.snapToPixel = true;
-        // gridSquare.alpha = 0;
         gridSquare.x = x * 17;
         gridSquare.y = y * 17;
         gridSquare.size = 17;
@@ -352,6 +284,39 @@ class GameView {
     this.stage.update();
   }
 };
+
+// let intersection = this.collisionMethod(ghost, this.squares[key], 1);
+// // debugger;
+// if (this.squares[key].blocked === true && intersection) {
+//   // debugger;
+//   let xVel = ghost.xVel;
+//   let yVel = ghost.yVel;
+//   ghost.xVel = yVel;
+//   ghost.yVel = xVel * -1;
+// }
+// let pt = this.squares[key].globalToLocal(ghost.x, ghost.y);
+// let pt2 = this.squares[key].globalToLocal(ghost.x + 17, ghost.y + 17);
+// let pt3 = this.squares[key].globalToLocal(ghost.x + 17, ghost.y);
+// let pt4 = this.squares[key].globalToLocal(ghost.x, ghost.y + 17);
+// let pt5 = this.squares[key].globalToLocal(ghost.x + 9, ghost.y);
+// let pt6 = this.squares[key].globalToLocal(ghost.x + 17, ghost.y + 9);
+// let pt7 = this.squares[key].globalToLocal(ghost.x + 9, ghost.y + 17);
+// let pt8 = this.squares[key].globalToLocal(ghost.x, ghost.y + 9);
+// debugger;
+// if ( this.squares[key].blocked === true && (this.squares[key].hitTest(pt.x, pt.y) || this.squares[key].hitTest(pt2.x, pt2.y)  ) ) {
+//   if (this.squares[key].hitTest(pt4.x, pt4.y)) {
+//     console.log("pt4");
+//     let xVel = ghost.xVel;
+//     let yVel = ghost.yVel;
+//     ghost.xVel = yVel * -1;
+//     ghost.yVel = xVel * -1;
+//   } else {
+//     let xVel = ghost.xVel;
+//     let yVel = ghost.yVel;
+//     ghost.xVel = yVel;
+//     ghost.yVel = xVel * -1;
+//   }
+// }
 
 /* harmony default export */ __webpack_exports__["a"] = (GameView);
 
