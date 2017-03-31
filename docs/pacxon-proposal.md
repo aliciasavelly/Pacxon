@@ -87,7 +87,7 @@ The ```pacxon.js``` script will handle the logic for how the various pieces are 
 ### Checklist:
 
 - [x] Phase 1
-- [ ] Phase 2
+- [x] Phase 2
 - [ ] Phase 3
 - [ ] Phase 4
 
