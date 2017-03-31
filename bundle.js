@@ -81,7 +81,7 @@ class GameView {
 
     let body = document.getElementById("body");
 
-    this.squareClick = this.squareClick.bind(this);
+    // this.squareClick = this.squareClick.bind(this);
     this.setup = this.setup.bind(this);
     this.handleImageLoadPacman = this.handleImageLoadPacman.bind(this);
     this.handleImageLoadGhost = this.handleImageLoadGhost.bind(this);
@@ -258,7 +258,7 @@ class GameView {
           gridSquare.blocked = false;
           gridSquare.border = false;
         }
-        gridSquare.addEventListener("click", this.squareClick);
+        // gridSquare.addEventListener("click", this.squareClick);
         this.stage.addChild(gridSquare);
 
         let id = gridSquare.x + "_" + gridSquare.y
@@ -268,21 +268,21 @@ class GameView {
     this.stage.update();
   }
 
-  squareClick(e) {
-    console.log("clicked");
-    let current = this.squares[e.target.x + "_" + e.target.y];
-
-    if (current.blocked === true) {
-      if (current.border === false) {
-        current.graphics.beginFill("#1D9C73").drawRect(0, 0, 17, 17);
-        current.blocked = false;
-      }
-    } else {
-      current.graphics.beginFill("blue").drawRect(0, 0, 17, 17);
-      current.blocked = true;
-    }
-    this.stage.update();
-  }
+  // squareClick(e) {
+  //   console.log("clicked");
+  //   let current = this.squares[e.target.x + "_" + e.target.y];
+  //
+  //   if (current.blocked === true) {
+  //     if (current.border === false) {
+  //       current.graphics.beginFill("#1D9C73").drawRect(0, 0, 17, 17);
+  //       current.blocked = false;
+  //     }
+  //   } else {
+  //     current.graphics.beginFill("blue").drawRect(0, 0, 17, 17);
+  //     current.blocked = true;
+  //   }
+  //   this.stage.update();
+  // }
 };
 
 // let intersection = this.collisionMethod(ghost, this.squares[key], 1);
