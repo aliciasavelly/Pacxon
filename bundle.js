@@ -76,6 +76,7 @@ class GameView {
     this.stage = stage;
     this.squares = {};
     this.ghosts = [];
+    this.lives = 3;
     // this.collisionMethod = ndgmr.checkPixelCollision;
     // if ( this.collisionMethod == ndgmr.checkPixelCollision ) {
     //   this.collisionMethod = ndgmr.checkRectCollision;
@@ -91,7 +92,7 @@ class GameView {
     // }).bind(this);
     // debugger;
 
-    // this.squareClick = this.squareClick.bind(this);
+    this.squareClick = this.squareClick.bind(this);
     this.setup = this.setup.bind(this);
     this.handleImageLoadPacman = this.handleImageLoadPacman.bind(this);
     this.handleImageLoadGhost = this.handleImageLoadGhost.bind(this);
@@ -102,7 +103,7 @@ class GameView {
 
     this.setup();
     createjs.Ticker.addEventListener("tick", this.tick);
-    createjs.Ticker.setFPS(40);
+    createjs.Ticker.setFPS(30);
   }
 
   tick(event) {
@@ -122,7 +123,43 @@ class GameView {
   }
 
   testCollision(ghost) {
+    // debugger;
+    if (
+      ghost.x < this.pacman.x + this.pacman.size &&
+      ghost.x + ghost.size > this.pacman.x &&
+      ghost.y < this.pacman.y + this.pacman.size &&
+      ghost.y + ghost.size > this.pacman.y
+    ) {
+      this.lives -= 1;
+      // debugger;
+      document.getElementById("lives").innerHTML = `Lives: ${this.lives}`;
+      // console.log(this.lives);
+      if (this.lives < 0) {
+        document.getElementById("lives").innerHTML = "You lost the level. Try again!";
+        this.setup();
+      }
+      this.pacman.x = 1;
+      this.pacman.y = 1;
+    }
     for (let key in this.squares) {
+      // debugger;
+      // square = this.squares[key];
+      if (
+        this.squares[key].blocked === true &&
+        ghost.x < this.squares[key].x + this.squares[key].size &&
+        ghost.x + ghost.size > this.squares[key].x &&
+        ghost.y < this.squares[key].y + this.squares[key].size &&
+        ghost.y + ghost.size > this.squares[key].y
+      ) {
+        let xVel = ghost.xVel;
+        let yVel = ghost.yVel;
+        ghost.xVel = yVel;
+        ghost.yVel = xVel * -1;
+        // ghost.x = 30;
+        // ghost.y = 30;
+      }
+
+
       // let intersection = this.collisionMethod(ghost, this.squares[key], 1);
       // // debugger;
       // if (this.squares[key].blocked === true && intersection) {
@@ -132,21 +169,29 @@ class GameView {
       //   ghost.xVel = yVel;
       //   ghost.yVel = xVel * -1;
       // }
-      let pt = this.squares[key].globalToLocal(ghost.x, ghost.y);
-      let pt2 = this.squares[key].globalToLocal(ghost.x + 17, ghost.y + 17);
-      let pt3 = this.squares[key].globalToLocal(ghost.x + 17, ghost.y);
-      let pt4 = this.squares[key].globalToLocal(ghost.x, ghost.y + 17);
-      let pt5 = this.squares[key].globalToLocal(ghost.x + 9, ghost.y);
-      let pt6 = this.squares[key].globalToLocal(ghost.x + 17, ghost.y + 9);
-      let pt7 = this.squares[key].globalToLocal(ghost.x + 9, ghost.y + 17);
-      let pt8 = this.squares[key].globalToLocal(ghost.x, ghost.y + 9);
-
-      if ( this.squares[key].blocked === true && (this.squares[key].hitTest(pt.x, pt.y) || this.squares[key].hitTest(pt2.x, pt2.y) || this.squares[key].hitTest(pt3.x, pt3.y) || this.squares[key].hitTest(pt4.x, pt4.y)    ) ) {
-        let xVel = ghost.xVel;
-        let yVel = ghost.yVel;
-        ghost.xVel = yVel;
-        ghost.yVel = xVel * -1;
-      }
+      // let pt = this.squares[key].globalToLocal(ghost.x, ghost.y);
+      // let pt2 = this.squares[key].globalToLocal(ghost.x + 17, ghost.y + 17);
+      // let pt3 = this.squares[key].globalToLocal(ghost.x + 17, ghost.y);
+      // let pt4 = this.squares[key].globalToLocal(ghost.x, ghost.y + 17);
+      // let pt5 = this.squares[key].globalToLocal(ghost.x + 9, ghost.y);
+      // let pt6 = this.squares[key].globalToLocal(ghost.x + 17, ghost.y + 9);
+      // let pt7 = this.squares[key].globalToLocal(ghost.x + 9, ghost.y + 17);
+      // let pt8 = this.squares[key].globalToLocal(ghost.x, ghost.y + 9);
+      // debugger;
+      // if ( this.squares[key].blocked === true && (this.squares[key].hitTest(pt.x, pt.y) || this.squares[key].hitTest(pt2.x, pt2.y)  ) ) {
+      //   if (this.squares[key].hitTest(pt4.x, pt4.y)) {
+      //     console.log("pt4");
+      //     let xVel = ghost.xVel;
+      //     let yVel = ghost.yVel;
+      //     ghost.xVel = yVel * -1;
+      //     ghost.yVel = xVel * -1;
+      //   } else {
+      //     let xVel = ghost.xVel;
+      //     let yVel = ghost.yVel;
+      //     ghost.xVel = yVel;
+      //     ghost.yVel = xVel * -1;
+      //   }
+      // }
     }
   }
 
@@ -157,7 +202,7 @@ class GameView {
         this.squares[key].blocked = true;
         this.squares[key].graphics.beginFill("blue").drawRect(0, 0, 17, 17);
 
-        console.log(this.squares[key].blocked);
+        // console.log(this.squares[key].blocked);
       }
     }
   }
@@ -214,6 +259,7 @@ class GameView {
     bitmap.scaleY = 0.0071;
     bitmap.x = 1;
     bitmap.y = 1;
+    bitmap.size = 17;
     this.stage.addChild(bitmap);
     this.stage.update();
     this.pacman = bitmap;
@@ -222,7 +268,7 @@ class GameView {
       // debugger;
       // console.log(this);
       if (e.key === "ArrowDown") {
-        console.log(e.key);
+        // console.log(e.key);
         e.preventDefault();
       }
       this.handleKeydown(e);
@@ -247,7 +293,8 @@ class GameView {
     this.ghosts.push(bitmap);
     this.ghosts.forEach( ghost => {
       ghost.xVel = 4;
-      ghost.yVel = 2;
+      ghost.yVel = 4;
+      ghost.size = 17;
       // debugger;
       // console.log(this.ghosts[0].x);
     })
@@ -279,7 +326,7 @@ class GameView {
           gridSquare.blocked = false;
           gridSquare.border = false;
         }
-        // gridSquare.addEventListener("click", this.squareClick);
+        gridSquare.addEventListener("click", this.squareClick);
         this.stage.addChild(gridSquare);
 
         let id = gridSquare.x + "_" + gridSquare.y
@@ -289,25 +336,24 @@ class GameView {
     this.stage.update();
   }
 
-  // squareClick(e) {
-  //   console.log("clicked");
-  //   let current = this.squares[e.target.x + "_" + e.target.y];
-  //
-  //   if (current.blocked === true) {
-  //     if (current.border === false) {
-  //       current.graphics.beginFill("#1D9C73").drawRect(0, 0, 17, 17);
-  //       current.blocked = false;
-  //     }
-  //   } else {
-  //     current.graphics.beginFill("blue").drawRect(0, 0, 17, 17);
-  //     current.blocked = true;
-  //   }
-  //   this.stage.update();
-  // }
+  squareClick(e) {
+    console.log("clicked");
+    let current = this.squares[e.target.x + "_" + e.target.y];
+
+    if (current.blocked === true) {
+      if (current.border === false) {
+        current.graphics.beginFill("#1D9C73").drawRect(0, 0, 17, 17);
+        current.blocked = false;
+      }
+    } else {
+      current.graphics.beginFill("blue").drawRect(0, 0, 17, 17);
+      current.blocked = true;
+    }
+    this.stage.update();
+  }
 };
 
 /* harmony default export */ __webpack_exports__["a"] = (GameView);
-// module.exports = GameView;
 
 
 /***/ }),
