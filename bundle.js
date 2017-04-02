@@ -139,38 +139,34 @@ class GameView {
           let xDiff = ghostyX - ghost.x;
           let yDiff = ghostyY - ghost.y;
 
-          ghost.xVel = yVel;
-          ghost.yVel = xVel * -1;
-
-          // if (Math.abs(xDiff) > Math.abs(yDiff)) {
-          //   // hit right or left
-          //   if (ghostyX > ghost.x) {
-          //     // hit left side of square
-          //     ghost.x -= 4;
-          //     ghost.xVel = xVel * -1;
-          //     ghost.yVel = yVel;
-          //   } else {
-          //     // hit right
-          //     ghost.x += 4;
-          //     ghost.xVel = xVel * -1;
-          //     ghost.yVel = yVel;
-          //   }
-          // } else {
-          //   // hit top or bottom
-          //   if (ghostyY > ghost.y) {
-          //     // hit top of square
-          //     ghost.y -= 4;
-          //     ghost.xVel = xVel;
-          //     ghost.yVel = yVel * -1;
-          //   } else {
-          //     // hit bottom
-          //     ghost.y += 4;
-          //     ghost.xVel = xVel;
-          //     ghost.yVel = yVel * -1;
-          //   }
-          // }
-
-      }
+          if (Math.abs(xDiff) > Math.abs(yDiff)) {
+            // hit right or left
+            if (ghostyX > ghost.x) {
+              // hit left side of square
+              ghost.x -= 4;
+              ghost.xVel = xVel * -1;
+              ghost.yVel = yVel;
+            } else {
+              // hit right
+              ghost.x += 4;
+              ghost.xVel = xVel * -1;
+              ghost.yVel = yVel;
+            }
+          } else {
+            // hit top or bottom
+            if (ghostyY > ghost.y) {
+              // hit top of square
+              ghost.y -= 4;
+              ghost.xVel = xVel;
+              ghost.yVel = yVel * -1;
+            } else {
+              // hit bottom
+              ghost.y += 4;
+              ghost.xVel = xVel;
+              ghost.yVel = yVel * -1;
+            }
+          }
+        }
       }
     })
 
@@ -188,9 +184,6 @@ class GameView {
         let squareY = this.squares[key].y;
         let xDiff = squareX - ghost.x;
         let yDiff = squareY - ghost.y;
-
-        ghost.xVel = yVel;
-        ghost.yVel = xVel * -1;
 
         if (Math.abs(xDiff) > Math.abs(yDiff)) {
           // hit right or left
