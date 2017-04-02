@@ -124,6 +124,56 @@ class GameView {
       this.pacman.x = 1;
       this.pacman.y = 1;
     }
+    this.ghosts.forEach( ghosty => {
+      if (ghosty !== ghost) {
+        if (
+          ghost.x < ghosty.x + ghosty.size &&
+          ghost.x + ghost.size > ghosty.x &&
+          ghost.y < ghosty.y + ghosty.size &&
+          ghost.y + ghost.size > ghosty.y
+        ) {
+          let xVel = ghost.xVel;
+          let yVel = ghost.yVel;
+          let ghostyX = ghosty.x;
+          let ghostyY = ghosty.y;
+          let xDiff = ghostyX - ghost.x;
+          let yDiff = ghostyY - ghost.y;
+
+          ghost.xVel = yVel;
+          ghost.yVel = xVel * -1;
+
+          // if (Math.abs(xDiff) > Math.abs(yDiff)) {
+          //   // hit right or left
+          //   if (ghostyX > ghost.x) {
+          //     // hit left side of square
+          //     ghost.x -= 4;
+          //     ghost.xVel = xVel * -1;
+          //     ghost.yVel = yVel;
+          //   } else {
+          //     // hit right
+          //     ghost.x += 4;
+          //     ghost.xVel = xVel * -1;
+          //     ghost.yVel = yVel;
+          //   }
+          // } else {
+          //   // hit top or bottom
+          //   if (ghostyY > ghost.y) {
+          //     // hit top of square
+          //     ghost.y -= 4;
+          //     ghost.xVel = xVel;
+          //     ghost.yVel = yVel * -1;
+          //   } else {
+          //     // hit bottom
+          //     ghost.y += 4;
+          //     ghost.xVel = xVel;
+          //     ghost.yVel = yVel * -1;
+          //   }
+          // }
+
+      }
+      }
+    })
+
     for (let key in this.squares) {
       if (
         this.squares[key].blocked === true &&
