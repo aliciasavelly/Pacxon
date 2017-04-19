@@ -1,6 +1,20 @@
 body {
   background: black;
   color: #B3B3B3;
+  font-family: sans-serif;
+}
+
+
+.instructions-container {
+  width: 25%;
+  position: absolute;
+  top: 30%;
+  /*margin: 70px 0 0 15px;*/
+  margin-left: 15px;
+}
+
+p {
+  width: 100%;
 }
 
 .page-container {
@@ -30,3 +44,21 @@ h1 {
   background-image: url("/lib/assets/purple_space.jpeg");
   background-size: 578px 391px;
 }*/
+
+@media (max-width: 1250px) {
+  .instructions-container {
+    position: relative;
+    display: flex;
+    /*align-items: center;*/
+    justify-content: center;
+    flex-direction: column;
+    width: 100%;
+    /*top: 600px;*/
+    text-align: center;
+    margin-left: 0;
+  }
+
+  p {
+    margin: 5px 0 5px 0;
+  }
+}
