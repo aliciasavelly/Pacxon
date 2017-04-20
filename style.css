@@ -9,7 +9,6 @@ body {
   width: 25%;
   position: absolute;
   top: 30%;
-  /*margin: 70px 0 0 15px;*/
   margin-left: 15px;
 }
 
@@ -18,20 +17,13 @@ p {
 }
 
 .page-container {
-  /*background: white;*/
   display: flex;
   justify-content: center;
-  /*flex-direction: column;*/
-  /*align-content: center;*/
 }
 
 h1 {
-  /*box-sizing: border-box;*/
   width: 100px;
-  /*margin: 0;*/
-  /*padding: 0;*/
   margin: 0 auto;
-  /*color: #B3B3B3;*/
 }
 
 .canvas-div {
@@ -49,11 +41,9 @@ h1 {
   .instructions-container {
     position: relative;
     display: flex;
-    /*align-items: center;*/
     justify-content: center;
     flex-direction: column;
     width: 100%;
-    /*top: 600px;*/
     text-align: center;
     margin-left: 0;
   }
