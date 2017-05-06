@@ -1,6 +1,5 @@
 .git
 
-bundle.js
 bundle.js.map
 p5.collide2D.js
 ndgmr.Collision.js
