@@ -4,7 +4,7 @@
 
 Pacxon is a combination of two retro games: Pacman and Xonix. Game play is more similar to Xonix, but it has a look and feel closer to Pacman, because it includes the Pacman characters. Pacxon is a one player game on a rectangular grid. Blocks on the grid are toggled in and out of view, and the pacman ghosts bounce off of the blocks when they're toggled into view.
 
-![image of Pacxon](docs/images/screenshot2.png)
+![image of Pacxon](docs/images/screenshot3.png)
 
 
 ## How to play the game
