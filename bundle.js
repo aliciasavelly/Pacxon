@@ -102,7 +102,6 @@ class GameView {
     this.setup = this.setup.bind(this);
     this.tick = this.tick.bind(this);
     this.testCollision = this.testCollision.bind(this);
-    this.handleKeydown = this.handleKeydown.bind(this);
     this.handleKeyup = this.handleKeyup.bind(this);
     this.testPacmanCollision = this.testPacmanCollision.bind(this);
     this.floodFill = this.floodFill.bind(this);
@@ -559,50 +558,6 @@ class GameView {
   handleSpace(event) {
     if (event.keyCode === 32) {
       console.log("space bar pressed");
-    }
-  }
-
-  handleKeydown(event) {
-    if (event.key === "ArrowUp" && this.pacman.y >= 17) {
-      // this.pacman.rotation = -90;
-      // if (this.lastMove !== "up") {
-      //   this.pacman.y += 15;
-      // }
-      // this.lastMove = "up";
-      this.arrowUp = true;
-      this.arrowDown = false;
-      this.arrowLeft = false;
-      this.arrowRight = false;
-    } else if (event.key === "ArrowDown" && this.pacman.y <= 374) {
-      // this.pacman.rotation = 90;
-      // if (this.lastMove !== "down") {
-      //   this.pacman.x += 15;
-      // }
-      // this.lastMove = "down";
-      this.arrowUp = false;
-      this.arrowDown = true;
-      this.arrowLeft = false;
-      this.arrowRight = false;
-    } else if (event.key === "ArrowRight" && this.pacman.x <= 561) {
-      // this.pacman.rotation = 0;
-      // if (this.lastMove !== "right" && this.lastMove !== null) {
-      //   this.pacman.x -= 13;
-      // }
-      // this.lastMove = "right";
-      this.arrowUp = false;
-      this.arrowDown = false;
-      this.arrowLeft = false;
-      this.arrowRight = true;
-    } else if (event.key === "ArrowLeft" && this.pacman.x >= 17) {
-      // this.pacman.rotation = 180;
-      // if (this.lastMove !== "left") {
-      //   this.pacman.x += 15;
-      // }
-      // this.lastMove = "left";
-      this.arrowUp = false;
-      this.arrowDown = false;
-      this.arrowLeft = true;
-      this.arrowRight = false;
     }
   }
 
