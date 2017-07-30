@@ -72,6 +72,7 @@
 
 "use strict";
 const Ghost = __webpack_require__(1);
+const Pacman = __webpack_require__(3);
 
 const BLOCK_COLOR = "#0800a3";
 const EMPTY_COLOR = "#282828";
@@ -98,7 +99,7 @@ class GameView {
 
     // this.squareClick = this.squareClick.bind(this);
     this.setup = this.setup.bind(this);
-    this.handleImageLoadPacman = this.handleImageLoadPacman.bind(this);
+    // this.handleImageLoadPacman = this.handleImageLoadPacman.bind(this);
     this.tick = this.tick.bind(this);
     this.testCollision = this.testCollision.bind(this);
     this.handleKeydown = this.handleKeydown.bind(this);
@@ -543,9 +544,10 @@ class GameView {
     this.blocked = new Set();
     this.path = new Set();
 
-    this.pacmanImage = new Image();
-    this.pacmanImage.src = "./lib/assets/Pacman.png";
-    this.pacmanImage.onload = this.handleImageLoadPacman;
+    // this.pacmanImage = new Image();
+    // this.pacmanImage.src = "./lib/assets/Pacman.png";
+    // this.pacmanImage.onload = this.handleImageLoadPacman;
+    this.pacmanImage = new Pacman("./lib/assets/Pacman.png", this.stage, this);
 
     this.red_ghost = new Ghost("./lib/assets/red_ghost.png", this.stage, this.ghosts);
     this.orange_ghost = new Ghost("./lib/assets/orange_ghost.png", this.stage, this.ghosts);
@@ -611,28 +613,28 @@ class GameView {
     this.arrowRight = false;
   }
 
-  handleImageLoadPacman(event) {
-    let image = event.target;
-    let bitmap = new createjs.Bitmap(image);
-    bitmap.scaleX = 0.0071;
-    bitmap.scaleY = 0.0071;
-    bitmap.x = 1;
-    bitmap.y = 1;
-    bitmap.size = 17;
-    this.stage.addChild(bitmap);
-    this.stage.update();
-    this.pacman = bitmap;
-
-    if (this.level == 1) {
-      $(document).keydown(function(e) {
-        this.handleKeydown(e);
-      }.bind(this));
-
-      $(document).keyup(function(e) {
-        this.handleKeyup();
-      }.bind(this));
-    }
-  }
+  // handleImageLoadPacman(event) {
+  //   let image = event.target;
+  //   let bitmap = new createjs.Bitmap(image);
+  //   bitmap.scaleX = 0.0071;
+  //   bitmap.scaleY = 0.0071;
+  //   bitmap.x = 1;
+  //   bitmap.y = 1;
+  //   bitmap.size = 17;
+  //   this.stage.addChild(bitmap);
+  //   this.stage.update();
+  //   this.pacman = bitmap;
+  //
+  //   if (this.level == 1) {
+  //     $(document).keydown(function(e) {
+  //       this.handleKeydown(e);
+  //     }.bind(this));
+  //
+  //     $(document).keyup(function(e) {
+  //       this.handleKeyup();
+  //     }.bind(this));
+  //   }
+  // }
 
   generateGrid() {
     this.stage.removeAllChildren();
@@ -731,6 +733,48 @@ document.addEventListener("DOMContentLoaded", function(e) {
   let stage = new createjs.Stage("game-canvas");
   new __WEBPACK_IMPORTED_MODULE_0__lib_game_view_js__["a" /* default */](stage);
 });
+
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports) {
+
+class Pacman {
+  constructor(src, stage, game) {
+    this.img = new Image();
+    this.img.src = src;
+    this.stage = stage;
+    this.game = game;
+
+    this.handleImageLoad = this.handleImageLoad.bind(this);
+    this.img.onload = this.handleImageLoad;
+  }
+
+  handleImageLoad(event) {
+    let image = event.target;
+    let bitmap = new createjs.Bitmap(image);
+    bitmap.scaleX = 0.0071;
+    bitmap.scaleY = 0.0071;
+    bitmap.x = 1;
+    bitmap.y = 1;
+    bitmap.size = 17;
+    this.stage.addChild(bitmap);
+    this.stage.update();
+    this.game.pacman = bitmap;
+    // debugger;
+    if (this.game.level == 1) {
+      $(document).keydown(function(e) {
+        this.game.handleKeydown(e);
+      }.bind(this));
+
+      $(document).keyup(function(e) {
+        this.game.handleKeyup();
+      }.bind(this));
+    }
+  }
+}
+
+module.exports = Pacman;
 
 
 /***/ })
