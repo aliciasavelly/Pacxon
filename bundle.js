@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1);
+/******/ 	return __webpack_require__(__webpack_require__.s = 2);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -71,6 +71,8 @@
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+const Ghost = __webpack_require__(1);
+
 const BLOCK_COLOR = "#0800a3";
 const EMPTY_COLOR = "#282828";
 
@@ -546,10 +548,9 @@ class GameView {
     this.pacmanImage.src = "./lib/assets/Pacman.png";
     this.pacmanImage.onload = this.handleImageLoadPacman;
 
-    this.red_ghost = new Image();
-    this.red_ghost.src = "./lib/assets/red_ghost.png";
-    this.red_ghost.onload = this.handleImageLoadGhost;
-
+    this.red_ghost = new Ghost("./lib/assets/red_ghost.png", this.stage, this.ghosts);
+    // this.red_ghost.onload = this.red_ghost.handleImageLoad(event, this.stage, this.ghosts);
+    // debugger;
     this.orange_ghost = new Image();
     this.orange_ghost.src = "./lib/assets/orange_ghost.png";
     this.orange_ghost.onload = this.handleImageLoadGhost;
@@ -557,7 +558,7 @@ class GameView {
     this.pinky_ghost = new Image();
     this.pinky_ghost.src = "./lib/assets/pinky_ghost.png";
     this.pinky_ghost.onload = this.handleImageLoadGhost;
-
+    // debugger;
     this.generateGrid();
   }
 
@@ -642,6 +643,7 @@ class GameView {
   }
 
   handleImageLoadGhost(event) {
+    // debugger;
     let image = event.target;
     let bitmap = new createjs.Bitmap(image);
     bitmap.scaleX = 0.05;
@@ -708,15 +710,56 @@ class GameView {
 
 /***/ }),
 /* 1 */
+/***/ (function(module, exports) {
+
+class Ghost {
+  constructor(src, stage, ghosts) {
+    this.img = new Image();
+    this.img.src = src;
+    this.stage = stage;
+    this.ghosts = ghosts;
+    this.img.onload = this.handleImageLoad(event);
+
+    this.handleImageLoad = this.handleImageLoad.bind(this);
+  }
+
+  handleImageLoad(event) {
+    let image = event.target;
+    let bitmap = new createjs.Bitmap(image);
+    bitmap.scaleX = 0.05;
+    bitmap.scaleY = 0.05;
+
+    while (bitmap.y > 355 || bitmap.y < 20) {
+      bitmap.y = 400 * Math.random();
+    }
+    while (bitmap.x > 540 || bitmap.x < 20) {
+      bitmap.x = 600 * Math.random();
+    }
+
+    // debugger;
+    this.ghosts.push(bitmap);
+    this.ghosts.forEach( ghost => {
+      ghost.xVel = 4;
+      ghost.yVel = 4;
+      ghost.size = 17;
+    });
+
+    this.stage.addChild(bitmap);
+    this.stage.update();
+  }
+}
+
+module.exports = Ghost;
+
+
+/***/ }),
+/* 2 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_game_view_js__ = __webpack_require__(0);
 
-// require('./style.css');
-// document.write(require('./lib/game.js'));
-// const GameView = require('./lib/game_view.js');
 
 document.addEventListener("DOMContentLoaded", function(e) {
   let stage = new createjs.Stage("game-canvas");
