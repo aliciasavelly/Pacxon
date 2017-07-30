@@ -100,7 +100,9 @@ class GameView {
 
     // this.squareClick = this.squareClick.bind(this);
     this.setup = this.setup.bind(this);
+    debugger;
     this.tick = this.tick.bind(this);
+    debugger;
     this.testCollision = this.testCollision.bind(this);
     this.testPacmanCollision = this.testPacmanCollision.bind(this);
     this.floodFill = this.floodFill.bind(this);
@@ -112,16 +114,18 @@ class GameView {
   }
 
   tick(event) {
+    debugger;
     if (this.ghosts[0]) {
       this.ghosts.forEach( ghost => {
         ghost.x += ghost.xVel;
         ghost.y += ghost.yVel;
+        debugger;
         this.testCollision(ghost);
       })
     }
 
     this.move ? this.move = false : this.move = true;
-
+    debugger;
     if (this.arrowUp && this.move && this.pacman.y >= 17) {
       this.pacman.y -= 17;
     } else if (this.arrowDown && this.move && this.pacman.y <= 374) {
@@ -131,12 +135,13 @@ class GameView {
     } else if (this.arrowRight && this.move && this.pacman.x <= 561) {
       this.pacman.x += 17;
     }
-
+    debugger;
     this.testPacmanCollision(this.pacman);
     this.stage.update();
   }
 
   testCollision(inputGhost) {
+    debugger;
     if (
       inputGhost.x < this.pacman.x + this.pacman.size &&
       inputGhost.x + inputGhost.size > this.pacman.x &&
@@ -151,10 +156,10 @@ class GameView {
         this.level += 1;
         this.setup();
       }
-
+      debugger;
       this.pacman.x = 1;
       this.pacman.y = 1;
-
+      debugger;
       for (let item of this.path) {
         this.squares[item].blocked = false;
         this.squares[item].graphics.beginFill(EMPTY_COLOR).drawRect(0, 0, 17, 17);
@@ -226,9 +231,10 @@ class GameView {
             this.squares[item].graphics.beginFill(EMPTY_COLOR).drawRect(0, 0, 17, 17);
             this.percent -= .18;
           }
-
+          debugger;
           this.pacman.x = 1;
           this.pacman.y = 1;
+          debugger;
           this.lives -= 1;
           document.getElementById("percent").innerHTML = `Progress: ${Math.floor(this.percent)}/75%`
           document.getElementById("lives").innerHTML = `Lives: ${this.lives}`;
@@ -531,8 +537,10 @@ class GameView {
   }
 
   setup() {
+    debugger;
     createjs.Ticker.addEventListener("tick", this.tick);
     createjs.Ticker.setFPS(30);
+    debugger;
 
     this.squares = {};
     this.ghosts = [];
@@ -540,16 +548,17 @@ class GameView {
     this.percent = 0;
     this.blocked = new Set();
     this.path = new Set();
-
+    debugger;
     this.pacmanImage = new Pacman("./lib/assets/Pacman.png", this.stage, this);
     this.red_ghost = new Ghost("./lib/assets/red_ghost.png", this.stage, this.ghosts);
     this.orange_ghost = new Ghost("./lib/assets/orange_ghost.png", this.stage, this.ghosts);
     this.pinky_ghost = new Ghost("./lib/assets/pinky_ghost.png", this.stage, this.ghosts);
-
+    debugger;
     this.generateGrid();
   }
 
   generateGrid() {
+    debugger;
     this.stage.removeAllChildren();
     let gridSquare;
 
@@ -583,7 +592,9 @@ class GameView {
         this.squares[id] = gridSquare;
       }
     }
+    debugger;
     this.stage.update();
+    debugger;
   }
 };
 
@@ -662,6 +673,7 @@ class Pacman {
     this.handleImageLoad = this.handleImageLoad.bind(this);
     this.img.onload = this.handleImageLoad;
     this.handleKeyup = this.handleKeyup.bind(this);
+    this.testCollision = this.testCollision.bind(this);
   }
 
   handleImageLoad(event) {
@@ -675,7 +687,6 @@ class Pacman {
     this.stage.addChild(bitmap);
     this.stage.update();
     this.game.pacman = bitmap;
-    // debugger;
     if (this.game.level == 1) {
       $(document).keydown(function(e) {
         this.handleKeydown(e);
@@ -736,6 +747,71 @@ class Pacman {
     this.game.arrowDown = false;
     this.game.arrowLeft = false;
     this.game.arrowRight = false;
+  }
+
+  testCollision(pacman) {
+    for (let key in this.squares) {
+      let pt = this.game.squares[key].globalToLocal(pacman.x, pacman.y);
+
+      if ( this.game.path.size > 0 && this.game.path.has(key) === false && this.squares[key].hitTest(pt.x, pt.y) && this.squares[key].blocked === true && this.blocked.has(key) ) {
+        let path_block = this.path.values().next().value;
+
+        this.path.forEach( function(square) {
+          this.game.floodFill(square, true);
+        }.bind(this))
+
+        this.game.invalidSpots.forEach( function(spot)  {
+          let block_arr = spot.split("_");
+          let top = this.game.top(block_arr);
+          let bottom = this.game.bottom(block_arr);
+          let left = this.game.left(block_arr);
+          let right = this.game.right(block_arr);
+
+          if ((!this.game.invalidSpots.has(top) && !this.game.invalidSpots.has(bottom)) ||
+              (!this.game.invalidSpots.has(left) && ! this.game.invalidSpots.has(right))) {
+            this.game.invalidSpots.delete(spot);
+          }
+
+          if (this.game.path.has(spot)) {
+            this.game.invalidSpots.delete(spot);
+          }
+        }.bind(this));
+
+        this.game.invalidSpots.forEach( function(spot)  {
+          this.game.findInvalidSpots(spot);
+        }.bind(this));
+
+        this.game.invalidSpots.forEach( function(spot) {
+          this.game.floodZone.delete(spot);
+        }.bind(this));
+
+        this.game.floodZone.forEach( function(square) {
+          // TODO add next line with fill
+          this.game.squares[square].checked = false;
+          this.game.handleFilling(square);
+        }.bind(this));
+        this.game.floodZone = new Set();
+        this.game.invalidSpots = new Set();
+
+        for (let key in this.game.squares) {
+          this.game.squares[key].checked = false;
+        }
+
+        this.game.path.forEach(this.game.blocked.add, this.game.blocked);
+        this.game.path = new Set();
+        document.getElementById("percent").innerHTML = `Progress: ${Math.floor(this.game.percent)}/75%`
+
+        // TODO have user press key before game continues
+        this.game.handleLevelWin();
+      } else if ( this.game.squares[key].blocked === false && this.game.squares[key].hitTest(pt.x, pt.y) ) {
+        this.game.path.add(key);
+        this.game.handleFilling(key);
+        document.getElementById("percent").innerHTML = `Progress: ${Math.floor(this.game.percent)}/75%`;
+
+        // TODO have user press key before game continues
+        this.game.handleLevelWin();
+      }
+    }
   }
 }
 
