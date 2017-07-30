@@ -99,7 +99,6 @@ class GameView {
 
     // this.squareClick = this.squareClick.bind(this);
     this.setup = this.setup.bind(this);
-    // this.handleImageLoadPacman = this.handleImageLoadPacman.bind(this);
     this.tick = this.tick.bind(this);
     this.testCollision = this.testCollision.bind(this);
     this.handleKeydown = this.handleKeydown.bind(this);
@@ -612,29 +611,6 @@ class GameView {
     this.arrowLeft = false;
     this.arrowRight = false;
   }
-
-  // handleImageLoadPacman(event) {
-  //   let image = event.target;
-  //   let bitmap = new createjs.Bitmap(image);
-  //   bitmap.scaleX = 0.0071;
-  //   bitmap.scaleY = 0.0071;
-  //   bitmap.x = 1;
-  //   bitmap.y = 1;
-  //   bitmap.size = 17;
-  //   this.stage.addChild(bitmap);
-  //   this.stage.update();
-  //   this.pacman = bitmap;
-  //
-  //   if (this.level == 1) {
-  //     $(document).keydown(function(e) {
-  //       this.handleKeydown(e);
-  //     }.bind(this));
-  //
-  //     $(document).keyup(function(e) {
-  //       this.handleKeyup();
-  //     }.bind(this));
-  //   }
-  // }
 
   generateGrid() {
     this.stage.removeAllChildren();
