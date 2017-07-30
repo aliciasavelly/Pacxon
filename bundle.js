@@ -95,7 +95,8 @@ class GameView {
     this.floodZone = new Set();
     this.invalidSpots = new Set;
 
-    let body = document.getElementById("body");
+    // TODO what's body for?
+    // let body = document.getElementById("body");
 
     // this.squareClick = this.squareClick.bind(this);
     this.setup = this.setup.bind(this);
@@ -740,12 +741,56 @@ class Pacman {
     // debugger;
     if (this.game.level == 1) {
       $(document).keydown(function(e) {
-        this.game.handleKeydown(e);
+        this.handleKeydown(e);
       }.bind(this));
 
       $(document).keyup(function(e) {
         this.game.handleKeyup();
       }.bind(this));
+    }
+  }
+
+  handleKeydown(event) {
+    if (event.key === "ArrowUp" && this.game.pacman.y >= 17) {
+      // this.game.pacman.rotation = -90;
+      // if (this.lastMove !== "up") {
+      //   this.game.pacman.y += 15;
+      // }
+      // this.lastMove = "up";
+      this.game.arrowUp = true;
+      this.game.arrowDown = false;
+      this.game.arrowLeft = false;
+      this.game.arrowRight = false;
+    } else if (event.key === "ArrowDown" && this.game.pacman.y <= 374) {
+      // this.game.pacman.rotation = 90;
+      // if (this.lastMove !== "down") {
+      //   this.game.pacman.x += 15;
+      // }
+      // this.lastMove = "down";
+      this.game.arrowUp = false;
+      this.game.arrowDown = true;
+      this.game.arrowLeft = false;
+      this.game.arrowRight = false;
+    } else if (event.key === "ArrowRight" && this.game.pacman.x <= 561) {
+      // this.game.pacman.rotation = 0;
+      // if (this.lastMove !== "right" && this.lastMove !== null) {
+      //   this.game.pacman.x -= 13;
+      // }
+      // this.lastMove = "right";
+      this.game.arrowUp = false;
+      this.game.arrowDown = false;
+      this.game.arrowLeft = false;
+      this.game.arrowRight = true;
+    } else if (event.key === "ArrowLeft" && this.game.pacman.x >= 17) {
+      // this.game.pacman.rotation = 180;
+      // if (this.lastMove !== "left") {
+      //   this.game.pacman.x += 15;
+      // }
+      // this.lastMove = "left";
+      this.game.arrowUp = false;
+      this.game.arrowDown = false;
+      this.game.arrowLeft = true;
+      this.game.arrowRight = false;
     }
   }
 }
