@@ -548,6 +548,7 @@ class GameView {
     this.pacmanImage.src = "./lib/assets/Pacman.png";
     this.pacmanImage.onload = this.handleImageLoadPacman;
 
+    // debugger;
     this.red_ghost = new Ghost("./lib/assets/red_ghost.png", this.stage, this.ghosts);
     // this.red_ghost.onload = this.red_ghost.handleImageLoad(event, this.stage, this.ghosts);
     // debugger;
@@ -643,8 +644,8 @@ class GameView {
   }
 
   handleImageLoadGhost(event) {
-    // debugger;
     let image = event.target;
+    debugger;
     let bitmap = new createjs.Bitmap(image);
     bitmap.scaleX = 0.05;
     bitmap.scaleY = 0.05;
@@ -718,13 +719,14 @@ class Ghost {
     this.img.src = src;
     this.stage = stage;
     this.ghosts = ghosts;
-    this.img.onload = this.handleImageLoad(event);
-
+    
     this.handleImageLoad = this.handleImageLoad.bind(this);
+    this.img.onload = this.handleImageLoad;
   }
 
   handleImageLoad(event) {
     let image = event.target;
+    debugger;
     let bitmap = new createjs.Bitmap(image);
     bitmap.scaleX = 0.05;
     bitmap.scaleY = 0.05;
