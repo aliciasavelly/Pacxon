@@ -102,7 +102,6 @@ class GameView {
     this.setup = this.setup.bind(this);
     this.tick = this.tick.bind(this);
     this.testCollision = this.testCollision.bind(this);
-    this.handleKeyup = this.handleKeyup.bind(this);
     this.testPacmanCollision = this.testPacmanCollision.bind(this);
     this.floodFill = this.floodFill.bind(this);
     this.findInvalidSpots = this.findInvalidSpots.bind(this);
@@ -561,13 +560,6 @@ class GameView {
     }
   }
 
-  handleKeyup() {
-    this.arrowUp = false;
-    this.arrowDown = false;
-    this.arrowLeft = false;
-    this.arrowRight = false;
-  }
-
   generateGrid() {
     this.stage.removeAllChildren();
     let gridSquare;
@@ -680,6 +672,7 @@ class Pacman {
 
     this.handleImageLoad = this.handleImageLoad.bind(this);
     this.img.onload = this.handleImageLoad;
+    this.handleKeyup = this.handleKeyup.bind(this);
   }
 
   handleImageLoad(event) {
@@ -700,7 +693,7 @@ class Pacman {
       }.bind(this));
 
       $(document).keyup(function(e) {
-        this.game.handleKeyup();
+        this.handleKeyup();
       }.bind(this));
     }
   }
@@ -747,6 +740,13 @@ class Pacman {
       this.game.arrowLeft = true;
       this.game.arrowRight = false;
     }
+  }
+
+  handleKeyup() {
+    this.game.arrowUp = false;
+    this.game.arrowDown = false;
+    this.game.arrowLeft = false;
+    this.game.arrowRight = false;
   }
 }
 
