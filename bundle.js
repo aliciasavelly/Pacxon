@@ -155,11 +155,8 @@ class Game {
   constructor(stage, gameView) {
     this.stage = stage;
     this.gameView = gameView;
-    this.ghosts = [];
     this.lives = 2;
-    this.percent = 0;
     this.level = 1;
-    this.path = new Set;
     this.arrowUp = false;
     this.arrowDown = false;
     this.arrowLeft = false;
@@ -168,17 +165,42 @@ class Game {
     this.floodZone = new Set;
     this.invalidSpots = new Set;
 
-    this.setup = this.setup.bind(this);
     this.tick = this.tick.bind(this);
-    this.testCollision = this.testCollision.bind(this);
-    this.testPacmanCollision = this.testPacmanCollision.bind(this);
-    this.floodFill = this.floodFill.bind(this);
-    this.findInvalidSpots = this.findInvalidSpots.bind(this);
-    this.handleLevelWin = this.handleLevelWin.bind(this);
-    this.handleLevelLose = this.handleLevelLose.bind(this);
-    this.handleSetup = this.handleSetup.bind(this);
 
     this.setup();
+  }
+
+  setup() {
+    createjs.Ticker.addEventListener("tick", this.tick);
+    createjs.Ticker.setFPS(30);
+    this.gameView.reset();
+
+    this.squares = this.gameView.squares;
+    this.blocked = this.gameView.blocked;
+    this.path = new Set;
+    this.ghosts = [];
+    document.getElementById("lives").innerHTML = `Lives: ${this.lives}`;
+    this.percent = 0;
+    document.getElementById("percent").innerHTML = `Progress: 0/75%`;
+
+    this.pacmanImage = new Pacman("./lib/assets/pacman.png", this.stage, this);
+    this.red_ghost = new Ghost("./lib/assets/red_ghost.png", this.stage, this.ghosts);
+    this.orange_ghost = new Ghost("./lib/assets/orange_ghost.png", this.stage, this.ghosts);
+    this.pinky_ghost = new Ghost("./lib/assets/pinky_ghost.png", this.stage, this.ghosts);
+
+    this.gameView.generateGrid();
+  }
+
+  handleSetup(valid) {
+    $(document).keydown(function(e) {
+      if (valid) {
+        setTimeout(function() {
+          this.setup();
+          document.getElementById("congrats").innerHTML = "";
+        }.bind(this), 400);
+      }
+      valid = false;
+    }.bind(this));
   }
 
   tick(event) {
@@ -186,7 +208,7 @@ class Game {
       this.ghosts.forEach( ghost => {
         ghost.x += ghost.xVel;
         ghost.y += ghost.yVel;
-          this.testCollision(ghost);
+          this.testGhostPacmanCollision(ghost);
           this.testCollisionBetweenGhosts(ghost);
       });
     }
@@ -258,7 +280,7 @@ class Game {
     });
   }
 
-  testCollision(inputGhost) {
+  testGhostPacmanCollision(inputGhost) {
     for (let key in this.squares) {
       if (
         this.squares[key].blocked === true &&
@@ -575,39 +597,6 @@ class Game {
     createjs.Ticker.removeAllEventListeners();
 
     this.handleSetup(true);
-  }
-
-  handleSetup(valid) {
-    $(document).keydown(function(e) {
-      if (valid) {
-        setTimeout(function() {
-          this.setup();
-          document.getElementById("congrats").innerHTML = "";
-        }.bind(this), 400);
-      }
-      valid = false;
-    }.bind(this));
-  }
-
-  setup() {
-    createjs.Ticker.addEventListener("tick", this.tick);
-    createjs.Ticker.setFPS(30);
-    this.gameView.reset();
-
-    this.squares = this.gameView.squares;
-    this.blocked = this.gameView.blocked;
-    this.path = new Set;
-    this.ghosts = [];
-    document.getElementById("lives").innerHTML = `Lives: ${this.lives}`;
-    this.percent = 0;
-    document.getElementById("percent").innerHTML = `Progress: 0/75%`;
-
-    this.pacmanImage = new Pacman("./lib/assets/pacman.png", this.stage, this);
-    this.red_ghost = new Ghost("./lib/assets/red_ghost.png", this.stage, this.ghosts);
-    this.orange_ghost = new Ghost("./lib/assets/orange_ghost.png", this.stage, this.ghosts);
-    this.pinky_ghost = new Ghost("./lib/assets/pinky_ghost.png", this.stage, this.ghosts);
-
-    this.gameView.generateGrid();
   }
 }
 
