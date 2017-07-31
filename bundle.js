@@ -283,7 +283,10 @@ class GameView {
     this.stage = stage;
     this.squares = {};
     this.blocked = new Set;
+
     this.generateGrid = this.generateGrid.bind(this);
+    this.handleFilling = this.handleFilling.bind(this);
+
     this.generateGrid();
     this.game = new Game(this.stage, this);
   }
@@ -323,6 +326,16 @@ class GameView {
       }
     }
     this.stage.update();
+  }
+
+  reset() {
+    this.squares = new Set;
+    this.blocked = new Set;
+  }
+
+  handleFilling(key) {
+    this.squares[key].graphics.beginFill(BLOCK_COLOR).drawRect(0, 0, 17, 17);
+    this.squares[key].blocked = true;
   }
 };
 
@@ -367,7 +380,6 @@ class Game {
     this.handleLevelWin = this.handleLevelWin.bind(this);
     this.handleLevelLose = this.handleLevelLose.bind(this);
     this.handleSetup = this.handleSetup.bind(this);
-    this.handleFilling = this.handleFilling.bind(this);
 
     this.setup();
   }
@@ -748,7 +760,8 @@ class Game {
         this.floodZone.forEach( function(square) {
           // TODO add next line with fill
           this.squares[square].checked = false;
-          this.handleFilling(square);
+          this.gameView.handleFilling(square);
+          this.percent += .18;
         }.bind(this));
         this.floodZone = new Set;
         this.invalidSpots = new Set;
@@ -765,19 +778,14 @@ class Game {
         this.handleLevelWin();
       } else if ( this.squares[key].blocked === false && this.squares[key].hitTest(pt.x, pt.y) ) {
         this.path.add(key);
-        this.handleFilling(key);
+        this.gameView.handleFilling(key);
+        this.percent += .18;
         document.getElementById("percent").innerHTML = `Progress: ${Math.floor(this.percent)}/75%`;
 
         // TODO have user press key before game continues
         this.handleLevelWin();
       }
     }
-  }
-
-  handleFilling(key) {
-    this.squares[key].graphics.beginFill(BLOCK_COLOR).drawRect(0, 0, 17, 17);
-    this.squares[key].blocked = true;
-    this.percent += .18;
   }
 
   handleLevelWin() {
@@ -811,9 +819,9 @@ class Game {
   }
 
   setup() {
-    debugger;
     createjs.Ticker.addEventListener("tick", this.tick);
     createjs.Ticker.setFPS(30);
+    this.gameView.reset();
 
     this.squares = this.gameView.squares;
     this.ghosts = [];
