@@ -186,11 +186,8 @@ class Game {
       this.ghosts.forEach( ghost => {
         ghost.x += ghost.xVel;
         ghost.y += ghost.yVel;
-        // if (this.pacman) {
-          // debugger;
           this.testCollision(ghost);
           this.testCollisionBetweenGhosts(ghost);
-        // }
       });
     }
 
@@ -262,38 +259,6 @@ class Game {
   }
 
   testCollision(inputGhost) {
-    // if (
-    //   inputGhost.x < this.pacman.x + this.pacman.size &&
-    //   inputGhost.x + inputGhost.size > this.pacman.x &&
-    //   inputGhost.y < this.pacman.y + this.pacman.size &&
-    //   inputGhost.y + inputGhost.size > this.pacman.y
-    // ) {
-    //   debugger;
-    //   console.log(124);
-    //   this.lives -= 1;
-    //
-    //   if (this.lives < 0) {
-    //     this.handleLevelLose(true);
-    //   } else {
-    //     this.pacman.x = 7;
-    //     this.pacman.y = 7.5;
-    //     document.getElementById("lives").innerHTML = `Lives: ${this.lives}`;
-    //   }
-    //
-    //   debugger;
-    //   for (let item of this.path) {
-    //     this.squares[item].blocked = false;
-    //     this.squares[item].graphics.beginFill(EMPTY_COLOR).drawRect(0, 0, 17, 17);
-    //     this.percent -= .18;
-    //     document.getElementById("percent").innerHTML = `Progress: ${Math.floor(this.percent)}/75%`
-    //   }
-    //
-    //   debugger;
-    //   this.path.clear();
-    // }
-
-    // this.testCollisionBetweenGhosts(inputGhost);
-
     for (let key in this.squares) {
       if (
         this.squares[key].blocked === true &&
@@ -314,7 +279,6 @@ class Game {
 
           if (this.lives < 0) {
             this.lives = 2;
-            // debugger;
             this.handleLevelLose();
           } else {
             this.pacman.x = 7;
@@ -364,7 +328,6 @@ class Game {
   }
 
   floodFill(key, start = true) {
-    // debugger;
     let block_arr = key.split("_");
     let top = this.top(block_arr);
     let bottom = this.bottom(block_arr);
