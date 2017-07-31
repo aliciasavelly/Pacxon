@@ -392,7 +392,7 @@ class Game {
         ghost.x += ghost.xVel;
         ghost.y += ghost.yVel;
         this.testCollision(ghost);
-      })
+      });
     }
 
     this.move ? this.move = false : this.move = true
@@ -422,7 +422,6 @@ class Game {
       this.lives -= 1;
 
       if (this.lives < 0) {
-        // debugger;
         this.handleLevelLose(true);
       } else {
         this.pacman.x = 1;
@@ -555,6 +554,7 @@ class Game {
   }
 
   floodFill(key, start = true) {
+    // debugger;
     let block_arr = key.split("_");
     let top = this.top(block_arr);
     let bottom = this.bottom(block_arr);
@@ -727,13 +727,16 @@ class Game {
     for (let key in this.squares) {
       let pt = this.squares[key].globalToLocal(pacman.x, pacman.y);
 
-      // debugger;
-      if ( this.path.size > 0 && this.path.has(key) === false && this.squares[key].hitTest(pt.x, pt.y) && this.squares[key].blocked === true && this.blocked.has(key) ) {
+      if (this.path.size > 0 && this.path.has(key) === false && this.squares[key].hitTest(pt.x, pt.y) && this.squares[key].blocked === true) {
         // debugger;
+      }
+      if ( this.path.size > 0 && this.path.has(key) === false && this.squares[key].hitTest(pt.x, pt.y) && this.squares[key].blocked === true && this.blocked.has(key) ) {
         let path_block = this.path.values().next().value;
 
         this.path.forEach( function(square) {
           this.floodFill(square, true);
+          // debugger;
+          this.blocked.add(square);
         }.bind(this));
 
         this.invalidSpots.forEach( function(spot)  {
@@ -750,6 +753,8 @@ class Game {
 
           if (this.path.has(spot)) {
             this.invalidSpots.delete(spot);
+            // debugger;
+            this.blocked.add(square);
           }
         }.bind(this));
 
@@ -760,11 +765,11 @@ class Game {
         this.invalidSpots.forEach( function(spot) {
           this.floodZone.delete(spot);
         }.bind(this));
-        // debugger;
         this.floodZone.forEach( function(square) {
           this.squares[square].checked = false;
           this.gameView.handleFilling(square);
           this.squares[square].blocked = true;
+          this.blocked.add(square);
           this.percent += .18;
         }.bind(this));
         this.floodZone = new Set;
@@ -776,6 +781,7 @@ class Game {
 
         this.path = new Set;
       } else if ( this.squares[key].blocked === false && this.squares[key].hitTest(pt.x, pt.y) ) {
+        // debugger;
         this.path.add(key);
         this.gameView.handleFilling(key);
         this.percent += .18;
@@ -792,7 +798,6 @@ class Game {
       document.getElementById("congrats").innerHTML = "Congrats! You won the level!";
       createjs.Ticker.removeAllEventListeners();
 
-      debugger;
       this.handleSetup(true);
     }
   }
