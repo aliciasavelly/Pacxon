@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 2);
+/******/ 	return __webpack_require__(__webpack_require__.s = 4);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -71,8 +71,9 @@
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-const Ghost = __webpack_require__(1);
+const Ghost = __webpack_require__(2);
 const Pacman = __webpack_require__(3);
+const Game = __webpack_require__(1);
 
 const BLOCK_COLOR = "#0800a3";
 const EMPTY_COLOR = "#282828";
@@ -85,24 +86,19 @@ class GameView {
     this.lives = 2;
     this.percent = 0;
     this.level = 1;
-    this.path = new Set();
-    this.blocked = new Set();
+    this.path = new Set;
+    this.blocked = new Set;
     this.arrowUp = false;
     this.arrowDown = false;
     this.arrowLeft = false;
     this.arrowRight = false;
     this.move = false;
-    this.floodZone = new Set();
+    this.floodZone = new Set;
     this.invalidSpots = new Set;
-
-    // TODO what's body for?
-    // let body = document.getElementById("body");
 
     // this.squareClick = this.squareClick.bind(this);
     this.setup = this.setup.bind(this);
-    debugger;
     this.tick = this.tick.bind(this);
-    debugger;
     this.testCollision = this.testCollision.bind(this);
     this.testPacmanCollision = this.testPacmanCollision.bind(this);
     this.floodFill = this.floodFill.bind(this);
@@ -114,34 +110,32 @@ class GameView {
   }
 
   tick(event) {
-    debugger;
     if (this.ghosts[0]) {
       this.ghosts.forEach( ghost => {
         ghost.x += ghost.xVel;
         ghost.y += ghost.yVel;
-        debugger;
         this.testCollision(ghost);
       })
     }
 
-    this.move ? this.move = false : this.move = true;
-    debugger;
-    if (this.arrowUp && this.move && this.pacman.y >= 17) {
-      this.pacman.y -= 17;
-    } else if (this.arrowDown && this.move && this.pacman.y <= 374) {
-      this.pacman.y += 17;
-    } else if (this.arrowLeft && this.move && this.pacman.x >= 17) {
-      this.pacman.x -= 17;
-    } else if (this.arrowRight && this.move && this.pacman.x <= 561) {
-      this.pacman.x += 17;
+    this.move ? this.move = false : this.move = true
+    if (this.move) {
+      if (this.arrowUp && this.pacman.y >= 17) {
+        this.pacman.y -= 17;
+      } else if (this.arrowDown && this.pacman.y <= 374) {
+        this.pacman.y += 17;
+      } else if (this.arrowLeft && this.pacman.x >= 17) {
+        this.pacman.x -= 17;
+      } else if (this.arrowRight && this.pacman.x <= 561) {
+        this.pacman.x += 17;
+      }
     }
-    debugger;
+
     this.testPacmanCollision(this.pacman);
     this.stage.update();
   }
 
   testCollision(inputGhost) {
-    debugger;
     if (
       inputGhost.x < this.pacman.x + this.pacman.size &&
       inputGhost.x + inputGhost.size > this.pacman.x &&
@@ -156,10 +150,10 @@ class GameView {
         this.level += 1;
         this.setup();
       }
-      debugger;
+
       this.pacman.x = 1;
       this.pacman.y = 1;
-      debugger;
+
       for (let item of this.path) {
         this.squares[item].blocked = false;
         this.squares[item].graphics.beginFill(EMPTY_COLOR).drawRect(0, 0, 17, 17);
@@ -231,10 +225,10 @@ class GameView {
             this.squares[item].graphics.beginFill(EMPTY_COLOR).drawRect(0, 0, 17, 17);
             this.percent -= .18;
           }
-          debugger;
+
           this.pacman.x = 1;
           this.pacman.y = 1;
-          debugger;
+
           this.lives -= 1;
           document.getElementById("percent").innerHTML = `Progress: ${Math.floor(this.percent)}/75%`
           document.getElementById("lives").innerHTML = `Lives: ${this.lives}`;
@@ -497,15 +491,15 @@ class GameView {
           this.squares[square].checked = false;
           this.handleFilling(square);
         }.bind(this));
-        this.floodZone = new Set();
-        this.invalidSpots = new Set();
+        this.floodZone = new Set;
+        this.invalidSpots = new Set;
 
         for (let key in this.squares) {
           this.squares[key].checked = false;
         }
 
         this.path.forEach(this.blocked.add, this.blocked);
-        this.path = new Set();
+        this.path = new Set;
         document.getElementById("percent").innerHTML = `Progress: ${Math.floor(this.percent)}/75%`
 
         // TODO have user press key before game continues
@@ -528,37 +522,43 @@ class GameView {
   }
 
   handleLevelWin() {
-    if (Math.floor(this.percent) >= 75 ) {
-      document.getElementById("lives").innerHTML = "You won the level!";
-      this.setup();
-      this.percent = 0;
-      document.getElementById("percent").innerHTML = `Progress: ${Math.floor(this.percent)}/75%`;
+    if (Math.floor(this.percent) >= 40 ) {
+      document.getElementById("congrats").innerHTML = "Congrats! You won the level!";
+      createjs.Ticker.removeAllEventListeners();
+      let setup = true;
+
+      $(document).keydown(function(e) {
+        if (setup) {
+          setTimeout(function() {
+            this.setup();
+            document.getElementById("congrats").innerHTML = "";
+          }.bind(this), 400);
+        }
+        setup = false;
+      }.bind(this));
     }
   }
 
   setup() {
-    debugger;
     createjs.Ticker.addEventListener("tick", this.tick);
     createjs.Ticker.setFPS(30);
-    debugger;
 
     this.squares = {};
     this.ghosts = [];
     this.lives = 2;
+    document.getElementById("lives").innerHTML = `Lives: ${this.lives}`;
     this.percent = 0;
-    this.blocked = new Set();
-    this.path = new Set();
-    debugger;
+    document.getElementById("percent").innerHTML = `Progress: 0/75%`;
+    this.blocked = new Set;
+    this.path = new Set;
     this.pacmanImage = new Pacman("./lib/assets/Pacman.png", this.stage, this);
     this.red_ghost = new Ghost("./lib/assets/red_ghost.png", this.stage, this.ghosts);
     this.orange_ghost = new Ghost("./lib/assets/orange_ghost.png", this.stage, this.ghosts);
     this.pinky_ghost = new Ghost("./lib/assets/pinky_ghost.png", this.stage, this.ghosts);
-    debugger;
     this.generateGrid();
   }
 
   generateGrid() {
-    debugger;
     this.stage.removeAllChildren();
     let gridSquare;
 
@@ -592,9 +592,7 @@ class GameView {
         this.squares[id] = gridSquare;
       }
     }
-    debugger;
     this.stage.update();
-    debugger;
   }
 };
 
@@ -603,6 +601,50 @@ class GameView {
 
 /***/ }),
 /* 1 */
+/***/ (function(module, exports) {
+
+class Game {
+  constructor() {
+    this.ghosts = [];
+    this.lives = 2;
+    this.percent = 0;
+    this.level = 1;
+    this.path = new Set();
+    this.blocked = new Set();
+  }
+
+  tick(event) {
+    if (this.ghosts[0]) {
+      this.ghosts.forEach( ghost => {
+        ghost.x += ghost.xVel;
+        ghost.y += ghost.yVel;
+        this.testCollision(ghost);
+      })
+    }
+
+    this.move ? this.move = false : this.move = true
+    if (this.move) {
+      if (this.arrowUp && this.pacman.y >= 17) {
+        this.pacman.y -= 17;
+      } else if (this.arrowDown && this.pacman.y <= 374) {
+        this.pacman.y += 17;
+      } else if (this.arrowLeft && this.pacman.x >= 17) {
+        this.pacman.x -= 17;
+      } else if (this.arrowRight && this.pacman.x <= 561) {
+        this.pacman.x += 17;
+      }
+    }
+
+    this.testPacmanCollision(this.pacman);
+    this.stage.update();
+  }
+}
+
+module.exports = Game;
+
+
+/***/ }),
+/* 2 */
 /***/ (function(module, exports) {
 
 class Ghost {
@@ -642,21 +684,6 @@ class Ghost {
 }
 
 module.exports = Ghost;
-
-
-/***/ }),
-/* 2 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_game_view_js__ = __webpack_require__(0);
-
-
-document.addEventListener("DOMContentLoaded", function(e) {
-  let stage = new createjs.Stage("game-canvas");
-  new __WEBPACK_IMPORTED_MODULE_0__lib_game_view_js__["a" /* default */](stage);
-});
 
 
 /***/ }),
@@ -816,6 +843,21 @@ class Pacman {
 }
 
 module.exports = Pacman;
+
+
+/***/ }),
+/* 4 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_game_view_js__ = __webpack_require__(0);
+
+
+document.addEventListener("DOMContentLoaded", function(e) {
+  let stage = new createjs.Stage("game-canvas");
+  new __WEBPACK_IMPORTED_MODULE_0__lib_game_view_js__["a" /* default */](stage);
+});
 
 
 /***/ })
