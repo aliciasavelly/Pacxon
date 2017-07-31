@@ -583,7 +583,7 @@ class Game {
   }
 
   handleLevelWin() {
-    if (Math.floor(this.percent) >= 40 ) {
+    if (Math.floor(this.percent) >= 75 ) {
       this.percent = 0;
       this.level += 1;
       document.getElementById("congrats").innerHTML = "Congrats! You won the level!";
@@ -699,19 +699,26 @@ class Pacman {
   }
 
   handleImageLoad(event) {
-    let image = event.target;
-    let bitmap = new createjs.Bitmap(image);
-    bitmap.scaleX = 0.0071;
-    bitmap.scaleY = 0.0071;
-    bitmap.x = 1;
-    bitmap.y = 1;
-    bitmap.size = 17;
-    this.stage.addChild(bitmap);
+    // let image = event.target;
+    let img = new Image();
+    img.src = event.target.src;
+    let pacman = new createjs.Bitmap(img);
+    pacman.scaleX = 0.0071;
+    pacman.scaleY = 0.0071;
+
+    let pacmanContainer = new createjs.Container();
+    pacmanContainer.addChild(pacman);
+    pacmanContainer.x = 1;
+    pacmanContainer.y = 1;
+    // pacman.regX = 8.5;
+    // pacman.regY = 8.5;
+    pacman.x = 1;
+    pacman.y = 1;
+    // bitmap.size = 17;
+    this.stage.addChild(pacmanContainer);
     this.stage.update();
-    this.game.pacman = bitmap;
+    this.game.pacman = pacman;
     this.pacman = this.game.pacman;
-    this.game.pacman.regX = 50;
-    this.game.pacman.regy = 50;
     if (this.game.level == 1) {
       $(document).keydown(function(e) {
         this.handleKeydown(e);
