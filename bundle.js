@@ -137,6 +137,7 @@ class Pacman {
     this.stage.addChild(bitmap);
     this.stage.update();
     this.game.pacman = bitmap;
+    // debugger;
     if (this.game.level == 1) {
       $(document).keydown(function(e) {
         this.handleKeydown(e);
@@ -286,6 +287,7 @@ class GameView {
 
     this.generateGrid = this.generateGrid.bind(this);
     this.handleFilling = this.handleFilling.bind(this);
+    this.reset = this.reset.bind(this);
 
     this.generateGrid();
     this.game = new Game(this.stage, this);
@@ -335,6 +337,7 @@ class GameView {
   handleFilling(key) {
     this.squares[key].graphics.beginFill(BLOCK_COLOR).drawRect(0, 0, 17, 17);
     this.squares[key].blocked = true;
+    // debugger;
   }
 };
 
@@ -419,7 +422,7 @@ class Game {
       this.lives -= 1;
 
       if (this.lives < 0) {
-        debugger;
+        // debugger;
         this.handleLevelLose(true);
       } else {
         this.pacman.x = 1;
@@ -724,12 +727,14 @@ class Game {
     for (let key in this.squares) {
       let pt = this.squares[key].globalToLocal(pacman.x, pacman.y);
 
+      // debugger;
       if ( this.path.size > 0 && this.path.has(key) === false && this.squares[key].hitTest(pt.x, pt.y) && this.squares[key].blocked === true && this.blocked.has(key) ) {
+        // debugger;
         let path_block = this.path.values().next().value;
 
         this.path.forEach( function(square) {
           this.floodFill(square, true);
-        }.bind(this))
+        }.bind(this));
 
         this.invalidSpots.forEach( function(spot)  {
           let block_arr = spot.split("_");
@@ -755,10 +760,11 @@ class Game {
         this.invalidSpots.forEach( function(spot) {
           this.floodZone.delete(spot);
         }.bind(this));
-
+        // debugger;
         this.floodZone.forEach( function(square) {
           this.squares[square].checked = false;
           this.gameView.handleFilling(square);
+          this.squares[square].blocked = true;
           this.percent += .18;
         }.bind(this));
         this.floodZone = new Set;
@@ -781,11 +787,12 @@ class Game {
 
   handleLevelWin() {
     if (Math.floor(this.percent) >= 40 ) {
+      this.percent = 0;
       this.level += 1;
       document.getElementById("congrats").innerHTML = "Congrats! You won the level!";
       createjs.Ticker.removeAllEventListeners();
-      let setup = true;
 
+      debugger;
       this.handleSetup(true);
     }
   }
