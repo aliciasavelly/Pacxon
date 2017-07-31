@@ -186,7 +186,10 @@ class Game {
       this.ghosts.forEach( ghost => {
         ghost.x += ghost.xVel;
         ghost.y += ghost.yVel;
-        this.testCollision(ghost);
+        // if (this.pacman) {
+          // debugger;
+          this.testCollision(ghost);
+        // }
       });
     }
 
@@ -203,37 +206,14 @@ class Game {
       }
     }
 
-    this.testPacmanCollision(this.pacman);
+    // if (this.pacman) {
+      this.testPacmanCollision(this.pacman);
+
+    // }
     this.stage.update();
   }
 
-  testCollision(inputGhost) {
-    if (
-      inputGhost.x < this.pacman.x + this.pacman.size &&
-      inputGhost.x + inputGhost.size > this.pacman.x &&
-      inputGhost.y < this.pacman.y + this.pacman.size &&
-      inputGhost.y + inputGhost.size > this.pacman.y
-    ) {
-      this.lives -= 1;
-
-      if (this.lives < 0) {
-        this.handleLevelLose(true);
-      } else {
-        this.pacman.x = 1;
-        this.pacman.y = 1;
-        document.getElementById("lives").innerHTML = `Lives: ${this.lives}`;
-      }
-
-      for (let item of this.path) {
-        this.squares[item].blocked = false;
-        this.squares[item].graphics.beginFill(EMPTY_COLOR).drawRect(0, 0, 17, 17);
-        this.percent -= .18;
-        document.getElementById("percent").innerHTML = `Progress: ${Math.floor(this.percent)}/75%`
-      }
-
-      this.path.clear();
-    }
-
+  testCollisionBetweenGhosts(inputGhost) {
     this.ghosts.forEach( ghost => {
       if (ghost !== inputGhost) {
         if (
@@ -248,7 +228,6 @@ class Game {
           let ghostY = ghost.y;
           let xDiff = ghostX - inputGhost.x;
           let yDiff = ghostY - inputGhost.y;
-
 
           if (Math.abs(xDiff) > Math.abs(yDiff)) {
             // hit right or left
@@ -280,6 +259,39 @@ class Game {
         }
       }
     });
+  }
+
+  testCollision(inputGhost) {
+    if (
+      inputGhost.x < this.pacman.x + this.pacman.size &&
+      inputGhost.x + inputGhost.size > this.pacman.x &&
+      inputGhost.y < this.pacman.y + this.pacman.size &&
+      inputGhost.y + inputGhost.size > this.pacman.y
+    ) {
+      debugger;
+      this.lives -= 1;
+
+      if (this.lives < 0) {
+        this.handleLevelLose(true);
+      } else {
+        this.pacman.x = 7;
+        this.pacman.y = 7.5;
+        document.getElementById("lives").innerHTML = `Lives: ${this.lives}`;
+      }
+
+      debugger;
+      for (let item of this.path) {
+        this.squares[item].blocked = false;
+        this.squares[item].graphics.beginFill(EMPTY_COLOR).drawRect(0, 0, 17, 17);
+        this.percent -= .18;
+        document.getElementById("percent").innerHTML = `Progress: ${Math.floor(this.percent)}/75%`
+      }
+
+      debugger;
+      this.path.clear();
+    }
+
+    this.testCollisionBetweenGhosts(inputGhost);
 
     for (let key in this.squares) {
       if (
@@ -296,19 +308,20 @@ class Game {
             this.percent -= .18;
           }
 
-
           this.lives -= 1;
           document.getElementById("percent").innerHTML = `Progress: ${Math.floor(this.percent)}/75%`
 
           if (this.lives < 0) {
             this.lives = 2;
+            // debugger;
             this.handleLevelLose();
           } else {
-            this.pacman.x = 1;
-            this.pacman.y = 1;
+            this.pacman.x = 7;
+            this.pacman.y = 7.5;
             document.getElementById("lives").innerHTML = `Lives: ${this.lives}`;
           }
-          this.path.clear();
+          // TODO why do we not need this?
+          // this.path.clear();
         }
 
         let xVel = inputGhost.xVel;
@@ -545,7 +558,7 @@ class Game {
 
           if (this.path.has(spot)) {
             this.invalidSpots.delete(spot);
-            this.blocked.add(square);
+            this.blocked.add(spot);
           }
         }.bind(this));
 
@@ -625,7 +638,7 @@ class Game {
     this.percent = 0;
     document.getElementById("percent").innerHTML = `Progress: 0/75%`;
 
-    this.pacmanImage = new Pacman("./lib/assets/Pacman.png", this.stage, this);
+    this.pacmanImage = new Pacman("./lib/assets/pacman2.png", this.stage, this);
     this.red_ghost = new Ghost("./lib/assets/red_ghost.png", this.stage, this.ghosts);
     this.orange_ghost = new Ghost("./lib/assets/orange_ghost.png", this.stage, this.ghosts);
     this.pinky_ghost = new Ghost("./lib/assets/pinky_ghost.png", this.stage, this.ghosts);
@@ -697,22 +710,22 @@ class Pacman {
     this.handleKeyup = this.handleKeyup.bind(this);
   }
 
-  handleImageLoad(event) {
+  handleImageLoad() {
     // let image = event.target;
-    let img = new Image();
-    img.src = event.target.src;
-    let pacman = new createjs.Bitmap(img);
-    pacman.scaleX = 0.0071;
-    pacman.scaleY = 0.0071;
+    // let img = new Image();
+    // img.src = event.target.src;
+    let pacman = new createjs.Bitmap(this.img);
+    // pacman.scaleX = 0.0071;
+    // pacman.scaleY = 0.0071;
 
     let pacmanContainer = new createjs.Container();
     pacmanContainer.addChild(pacman);
     pacmanContainer.x = 1;
     pacmanContainer.y = 1;
-    // pacman.regX = 8.5;
-    // pacman.regY = 8.5;
-    pacman.x = 1;
-    pacman.y = 1;
+    pacman.regX = 7;
+    pacman.regY = 7.5;
+    pacman.x = 7;
+    pacman.y = 7.5;
     // bitmap.size = 17;
     this.stage.addChild(pacmanContainer);
     this.stage.update();
@@ -731,7 +744,7 @@ class Pacman {
 
   handleKeydown(event) {
     if (event.key === "ArrowUp" && this.game.pacman.y >= 17) {
-      // this.game.pacman.rotation = -90;
+      this.game.pacman.rotation = -90;
       // if (this.lastMove !== "up") {
       //   this.game.pacman.y += 15;
       // }
@@ -741,7 +754,7 @@ class Pacman {
       this.game.arrowLeft = false;
       this.game.arrowRight = false;
     } else if (event.key === "ArrowDown" && this.game.pacman.y <= 374) {
-      // this.game.pacman.rotation = 90;
+      this.game.pacman.rotation = 90;
       // if (this.lastMove !== "down") {
         // this.game.pacman.skewX = 15;
       // }
@@ -752,7 +765,7 @@ class Pacman {
       this.game.arrowRight = false;
       // this.count = 1;
     } else if (event.key === "ArrowRight" && this.game.pacman.x <= 561) {
-      // this.game.pacman.rotation = 0;
+      this.game.pacman.rotation = 0;
       // if (this.lastMove !== "right" && this.lastMove !== null) {
         // this.game.pacman.skewX = -13;
       // }
@@ -762,7 +775,7 @@ class Pacman {
       this.game.arrowLeft = false;
       this.game.arrowRight = true;
     } else if (event.key === "ArrowLeft" && this.game.pacman.x >= 17) {
-      // this.game.pacman.rotation = 180;
+      this.game.pacman.rotation = 180;
       // if (this.lastMove !== "left") {
       //   this.game.pacman.x += 15;
       // }
