@@ -105,6 +105,7 @@ class GameView {
     this.findInvalidSpots = this.findInvalidSpots.bind(this);
     this.handleLevelWin = this.handleLevelWin.bind(this);
     this.handleLevelLose = this.handleLevelLose.bind(this);
+    this.handleSetup = this.handleSetup.bind(this);
     this.handleFilling = this.handleFilling.bind(this);
 
     this.setup();
@@ -144,27 +145,15 @@ class GameView {
       inputGhost.y + inputGhost.size > this.pacman.y
     ) {
       this.lives -= 1;
-      document.getElementById("lives").innerHTML = `Lives: ${this.lives}`;
 
       if (this.lives < 0) {
-        let gameOver = true;
-        this.level += 1;
         debugger;
-
-        $(document).keydown(function(e) {
-          if (gameOver) {
-            // debugger;
-            setTimeout(function() {
-              this.setup();
-              document.getElementById("congrats").innerHTML = "You lost the level. Try again!";
-            }.bind(this), 400);
-          }
-          gameOver = false;
-        }.bind(this));
+        this.handleLevelLose(true);
+      } else {
+        this.pacman.x = 1;
+        this.pacman.y = 1;
+        document.getElementById("lives").innerHTML = `Lives: ${this.lives}`;
       }
-
-      this.pacman.x = 1;
-      this.pacman.y = 1;
 
       for (let item of this.path) {
         this.squares[item].blocked = false;
@@ -238,21 +227,15 @@ class GameView {
             this.percent -= .18;
           }
 
-          this.pacman.x = 1;
-          this.pacman.y = 1;
 
           this.lives -= 1;
           document.getElementById("percent").innerHTML = `Progress: ${Math.floor(this.percent)}/75%`
 
           if (this.lives < 0) {
             this.handleLevelLose();
-            // debugger;
-            // document.getElementById("lives").innerHTML = "You lost the level. Try again!";
-            // this.level += 1;
-            // this.lives = 2;
-            // this.percent = 0;
-            // this.setup();
           } else {
+            this.pacman.x = 1;
+            this.pacman.y = 1;
             document.getElementById("lives").innerHTML = `Lives: ${this.lives}`;
           }
           this.path.clear();
@@ -543,32 +526,26 @@ class GameView {
       createjs.Ticker.removeAllEventListeners();
       let setup = true;
 
-      $(document).keydown(function(e) {
-        if (setup) {
-          setTimeout(function() {
-            this.setup();
-            document.getElementById("congrats").innerHTML = "";
-          }.bind(this), 400);
-        }
-        setup = false;
-      }.bind(this));
+      this.handleSetup(true);
     }
   }
 
   handleLevelLose() {
     document.getElementById("congrats").innerHTML = "You lost the level. Try again!";
     createjs.Ticker.removeAllEventListeners();
-    let gameOver = true;
 
+    this.handleSetup(true);
+  }
+
+  handleSetup(valid) {
     $(document).keydown(function(e) {
-      if (gameOver) {
-        // debugger;
+      if (valid) {
         setTimeout(function() {
           this.setup();
           document.getElementById("congrats").innerHTML = "";
         }.bind(this), 400);
       }
-      gameOver = false;
+      valid = false;
     }.bind(this));
   }
 
