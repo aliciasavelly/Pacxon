@@ -79,7 +79,7 @@ const EMPTY_COLOR = "#282828";
 class GameView {
   constructor(stage) {
     this.stage = stage;
-    this.squares = {};
+    this.squares = new Set;
     this.blocked = new Set;
 
     this.generateGrid();
@@ -190,8 +190,8 @@ class Game {
           document.getElementById("congrats").innerHTML = "";
         }.bind(this), 400);
       }
-      valid = false;
     }.bind(this));
+    valid = false;
   }
 
   tick(event) {
