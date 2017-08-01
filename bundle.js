@@ -186,12 +186,13 @@ class Game {
     $(document).keydown(function(e) {
       if (valid) {
         setTimeout(function() {
+          // debugger;
           this.setup();
           document.getElementById("congrats").innerHTML = "";
         }.bind(this), 400);
       }
+      valid = false;
     }.bind(this));
-    valid = false;
   }
 
   tick(event) {
