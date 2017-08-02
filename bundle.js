@@ -172,7 +172,7 @@ class Game {
     this.ghosts = [];
     document.getElementById("lives").innerHTML = `Lives: ${this.lives}`;
     this.percent = 0;
-    document.getElementById("percent").innerHTML = `Progress: 0/75%`;
+    this.handlingWin = false;
 
     this.pacmanImage = new Pacman("./lib/assets/pacman.png", this.stage, this);
     this.red_ghost = new Ghost("./lib/assets/red_ghost.png", this.stage, this.ghosts);
@@ -186,7 +186,6 @@ class Game {
     $(document).keydown(function(e) {
       if (valid) {
         setTimeout(function() {
-          // debugger;
           this.setup();
           document.getElementById("congrats").innerHTML = "";
         }.bind(this), 400);
@@ -289,7 +288,9 @@ class Game {
           }
 
           this.lives -= 1;
-          document.getElementById("percent").innerHTML = `Progress: ${Math.floor(this.percent)}/75%`
+          if (!this.handlingWin) {
+            document.getElementById("percent").innerHTML = `Progress: ${Math.floor(this.percent)}/75%`
+          }
 
           if (this.lives < 0) {
             this.lives = 2;
@@ -567,16 +568,19 @@ class Game {
         this.gameView.handleFilling(key);
         this.percent += .18;
       }
-      document.getElementById("percent").innerHTML = `Progress: ${Math.floor(this.percent)}/75%`;
+      if (!this.handlingWin) {
+        document.getElementById("percent").innerHTML = `Progress: ${Math.floor(this.percent)}/75%`;
+      }
       this.handleLevelWin();
     }
   }
 
   handleLevelWin() {
     if (Math.floor(this.percent) >= 75 ) {
-      this.percent = 0;
+      this.handlingWin = true;
       this.lives += 1;
       this.level += 1;
+      this.percent = 0;
       document.getElementById("congrats").innerHTML = "Congrats! You won the level!";
       createjs.Ticker.removeAllEventListeners();
 
