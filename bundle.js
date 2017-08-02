@@ -553,10 +553,10 @@ class Game {
 
   testGhostBlockCollision(block, ghost) {
     return (this.squares[block].checked === false &&
-       (ghost.x < this.squares[block].x + this.squares[block].size &&
-        ghost.x + ghost.size > this.squares[block].x &&
-        ghost.y < this.squares[block].y + this.squares[block].size &&
-        ghost.y + ghost.size > this.squares[block].y));
+     (ghost.x < this.squares[block].x + this.squares[block].size &&
+      ghost.x + ghost.size > this.squares[block].x &&
+      ghost.y < this.squares[block].y + this.squares[block].size &&
+      ghost.y + ghost.size > this.squares[block].y));
   }
 
   floodFill(key, start = true) {
@@ -565,11 +565,6 @@ class Game {
     let bottom = this.bottom(block_arr);
     let left = this.left(block_arr);
     let right = this.right(block_arr);
-
-    let floodTop;
-    let floodBottom;
-    let floodLeft;
-    let floodRight;
 
     this.ghosts.forEach( function(ghost) {
       if (this.testGhostBlockCollision(key, ghost) ||
@@ -592,26 +587,30 @@ class Game {
       }
     }.bind(this));
 
-    if (this.squares[top] && this.squares[top].blocked != true && this.squares[top].checked != true) {
-      // debugger;
+    let floodTop;
+    let floodBottom;
+    let floodLeft;
+    let floodRight;
+
+    if (this.squares[top] && !this.blocked.has(top) && !this.squares[top].checked) {
       this.squares[top].checked = true;
       floodTop = this.floodFill(top, false);
     } else {
       floodTop = true;
     }
-    if (this.squares[bottom] && this.squares[bottom].blocked != true && this.squares[bottom].checked != true) {
+    if (this.squares[bottom] && !this.blocked.has(bottom) && !this.squares[bottom].checked) {
       this.squares[bottom].checked = true;
       floodBottom = this.floodFill(bottom, false);
     } else {
       floodBottom = true;
     }
-    if (this.squares[left] && this.squares[left].blocked != true && this.squares[left].checked != true) {
+    if (this.squares[left] && !this.blocked.has(left) && !this.squares[left].checked) {
       this.squares[left].checked = true;
       floodLeft = this.floodFill(left, false);
     } else {
       floodLeft = true;
     }
-    if (this.squares[right] && this.squares[right].blocked === false && this.squares[right].checked === false) {
+    if (this.squares[right] && !this.blocked.has(right) && !this.squares[right].checked) {
       this.squares[right].checked = true;
       floodRight = this.floodFill(right, false);
     } else {
@@ -660,10 +659,6 @@ class Game {
         this.floodZone.add(right);
       }
     }
-
-    // if ((floodTop === false) || (floodBottom === false) || (floodLeft === false) || (floodRight === false)) {
-    //   return false;
-    // }
   }
 
   findInvalidSpots(spot) {
@@ -686,7 +681,7 @@ class Game {
   //   }
   // }
 
-// CHANGED
+// CHANGED. VALID
   testInvalidSpot(spot) {
     if (this.squares[spot] && !this.blocked.has(spot) && !this.invalidSpots.has(spot)) {
       this.invalidSpots.add(spot);
