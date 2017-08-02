@@ -227,52 +227,57 @@ class Game {
     this.stage.update();
   }
 
-  testCollisionBetweenGhosts(inputGhost) {
-    this.ghosts.forEach( ghost => {
-      if (ghost !== inputGhost) {
-        if (
-          inputGhost.x < ghost.x + ghost.size &&
-          inputGhost.x + inputGhost.size > ghost.x &&
-          inputGhost.y < ghost.y + ghost.size &&
-          inputGhost.y + inputGhost.size > ghost.y
-        ) {
-          let xVel = inputGhost.xVel;
-          let yVel = inputGhost.yVel;
-          let ghostX = ghost.x;
-          let ghostY = ghost.y;
-          let xDiff = ghostX - inputGhost.x;
-          let yDiff = ghostY - inputGhost.y;
+  testHitTwoObj(obj1, obj2) {
+    let xVel = obj1.xVel;
+    let yVel = obj1.yVel;
+    let ghostX = obj2.x;
+    let ghostY = obj2.y;
+    let xDiff = ghostX - obj1.x;
+    let yDiff = ghostY - obj1.y;
 
-          if (Math.abs(xDiff) > Math.abs(yDiff)) {
-            // hit right or left
-            if (ghostX > inputGhost.x) {
-              // hit left side of square
-              inputGhost.x -= 4;
-              inputGhost.xVel = xVel * -1;
-              inputGhost.yVel = yVel;
-            } else {
-              // hit right
-              inputGhost.x += 4;
-              inputGhost.xVel = xVel * -1;
-              inputGhost.yVel = yVel;
-            }
-          } else {
-            // hit top or bottom
-            if (ghostY > inputGhost.y) {
-              // hit top of square
-              inputGhost.y -= 4;
-              inputGhost.xVel = xVel;
-              inputGhost.yVel = yVel * -1;
-            } else {
-              // hit bottom
-              inputGhost.y += 4;
-              inputGhost.xVel = xVel;
-              inputGhost.yVel = yVel * -1;
-            }
-          }
-        }
+    if (Math.abs(xDiff) > Math.abs(yDiff)) {
+      // hit right or left
+      if (ghostX > obj1.x) {
+        // hit left side of square
+        obj1.x -= 4;
+        obj1.xVel = xVel * -1;
+        obj1.yVel = yVel;
+      } else {
+        // hit right
+        obj1.x += 4;
+        obj1.xVel = xVel * -1;
+        obj1.yVel = yVel;
       }
-    });
+    } else {
+      // hit top or bottom
+      if (ghostY > obj1.y) {
+        // hit top of square
+        obj1.y -= 4;
+        obj1.xVel = xVel;
+        obj1.yVel = yVel * -1;
+      } else {
+        // hit bottom
+        obj1.y += 4;
+        obj1.xVel = xVel;
+        obj1.yVel = yVel * -1;
+      }
+    }
+  }
+
+  testCollisionBetweenGhosts(inputGhost) {
+    for (let i = 0; i < this.ghosts.length; i++) {
+      let ghost = this.ghosts[i];
+      if (ghost === inputGhost) break;
+
+      if (
+        inputGhost.x < ghost.x + ghost.size &&
+        inputGhost.x + inputGhost.size > ghost.x &&
+        inputGhost.y < ghost.y + ghost.size &&
+        inputGhost.y + inputGhost.size > ghost.y
+      ) {
+        this.testHitTwoObj(inputGhost, ghost);
+      }
+    }
   }
 
   testGhostPacmanCollision(inputGhost) {
@@ -306,41 +311,7 @@ class Game {
             document.getElementById("lives").innerHTML = `Lives: ${this.lives}`;
           }
         }
-
-        let xVel = inputGhost.xVel;
-        let yVel = inputGhost.yVel;
-        let squareX = this.squares[key].x;
-        let squareY = this.squares[key].y;
-        let xDiff = squareX - inputGhost.x;
-        let yDiff = squareY - inputGhost.y;
-
-        if (Math.abs(xDiff) > Math.abs(yDiff)) {
-          // hit right or left
-          if (squareX > inputGhost.x) {
-            // hit left side of square
-            inputGhost.x -= 4;
-            inputGhost.xVel = xVel * -1;
-            inputGhost.yVel = yVel;
-          } else {
-            // hit right
-            inputGhost.x += 4;
-            inputGhost.xVel = xVel * -1;
-            inputGhost.yVel = yVel;
-          }
-        } else {
-          // hit top or bottom
-          if (squareY > inputGhost.y) {
-            // hit top of square
-            inputGhost.y -= 4;
-            inputGhost.xVel = xVel;
-            inputGhost.yVel = yVel * -1;
-          } else {
-            // hit bottom
-            inputGhost.y += 4;
-            inputGhost.xVel = xVel;
-            inputGhost.yVel = yVel * -1;
-          }
-        }
+        this.testHitTwoObj(inputGhost, this.squares[key]);
       }
     }
   }
