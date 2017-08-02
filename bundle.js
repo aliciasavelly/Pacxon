@@ -280,6 +280,7 @@ class Game {
         inputGhost.y < this.squares[key].y + this.squares[key].size &&
         inputGhost.y + inputGhost.size > this.squares[key].y
       ) {
+        debugger;
         if (this.path.has(key)) {
           for (let item of this.path) {
             this.squares[item].blocked = false;
@@ -551,7 +552,6 @@ class Game {
         this.floodZone.forEach( function(square) {
           this.squares[square].checked = false;
           this.gameView.handleFilling(square);
-          this.squares[square].blocked = true;
           this.blocked.add(square);
           this.percent += .18;
         }.bind(this));
@@ -564,6 +564,7 @@ class Game {
 
         this.path = new Set;
       } else if ( this.squares[key].blocked === false && this.squares[key].hitTest(pt.x, pt.y) ) {
+        // debugger;
         this.path.add(key);
         this.gameView.handleFilling(key);
         this.percent += .18;
