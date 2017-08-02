@@ -127,7 +127,7 @@ class GameView {
   handleFilling(key) {
     this.squares[key].graphics.beginFill(BLOCK_COLOR).drawRect(0, 0, 17, 17);
     // TODO
-    this.squares[key].blocked = true;
+    // this.squares[key].blocked = true;
     this.blocked.add(key);
     // debugger;
   }
@@ -302,6 +302,7 @@ class Game {
           } else {
             this.pacman.x = 7;
             this.pacman.y = 7.5;
+            this.pacman.rotation = 0;
             document.getElementById("lives").innerHTML = `Lives: ${this.lives}`;
           }
         }
