@@ -600,47 +600,29 @@ class Game {
     let floodLeft = this.testCheckedBlocked(left);
     let floodRight = this.testCheckedBlocked(right);
 
-    if (start != true &&
-      ((typeof floodTop === "function" && floodTop != true && floodTop() === false) ||
-       (typeof floodBottom === "function" && floodBottom() === false) ||
-       (typeof floodLeft === "function" && floodLeft != true && floodLeft() === false) ||
-       (typeof floodRight === "function" && floodRight != true && floodRight() === false))) {
-      return false;
-    }
+    // if (start != true &&
+    //   ((typeof floodTop === 'function' && floodTop != true && floodTop() === false) ||
+    //    (typeof floodBottom === 'function' && floodBottom != true && floodBottom() === false) ||
+    //    (typeof floodLeft === 'function' && floodLeft != true && floodLeft() === false) ||
+    //    (typeof floodRight === 'function' && floodRight != true && floodRight() === false))) {
+    //   return false;
+    // }
 
     if (start != true) {
-      if ((floodTop != false) &&
-      (floodBottom != false) &&
-      (floodLeft != false) &&
-      (floodRight != false)) {
-        if (floodTop != true) {
-          this.floodZone.add(top);
-        }
-        if (floodBottom != true) {
-          this.floodZone.add(bottom);
-        }
-        if (floodLeft != true) {
-          this.floodZone.add(left);
-        }
-        if (floodRight != true) {
-          this.floodZone.add(right);
-        }
+      if (floodTop != false && floodBottom != false &&
+          floodLeft != false && floodRight != false) {
+        if (floodTop != true) this.floodZone.add(top);
+        if (floodBottom != true) this.floodZone.add(bottom);
+        if (floodLeft != true) this.floodZone.add(left);
+        if (floodRight != true) this.floodZone.add(right);
       } else {
         return false;
       }
     } else {
-      if (floodTop != true && floodTop != false) {
-        this.floodZone.add(top);
-      }
-      if (floodBottom != true && floodBottom != false) {
-        this.floodZone.add(bottom);
-      }
-      if (floodLeft != true && floodLeft != false) {
-        this.floodZone.add(left);
-      }
-      if (floodRight != true && floodRight != false) {
-        this.floodZone.add(right);
-      }
+      if (typeof floodTop !== 'boolean') this.floodZone.add(top);
+      if (typeof floodBottom !== 'boolean') this.floodZone.add(bottom);
+      if (typeof floodLeft !== 'boolean') this.floodZone.add(left);
+      if (typeof floodRight !== 'boolean') this.floodZone.add(right);
     }
   }
 
