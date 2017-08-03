@@ -627,14 +627,9 @@ class Pacman {
   }
 
   handleImageLoad() {
-    // let image = event.target;
-    // let img = new Image();
-    // img.src = event.target.src;
     let pacman = new createjs.Bitmap(this.img);
-    // pacman.scaleX = 0.0071;
-    // pacman.scaleY = 0.0071;
-
     let pacmanContainer = new createjs.Container();
+
     pacmanContainer.addChild(pacman);
     pacmanContainer.x = 1;
     pacmanContainer.y = 1;
@@ -642,7 +637,6 @@ class Pacman {
     pacman.regY = 7.5;
     pacman.x = 7;
     pacman.y = 7.5;
-    // bitmap.size = 17;
     this.stage.addChild(pacmanContainer);
     this.stage.update();
     this.game.pacman = pacman;
