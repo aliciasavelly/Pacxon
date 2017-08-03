@@ -78,7 +78,6 @@ class Ghost {
     this.ghosts = ghosts;
     this.vel = vel;
     this.kill = kill;
-    // debugger;
 
     this.handleImageLoad = this.handleImageLoad.bind(this);
     this.img.onload = this.handleImageLoad;
@@ -96,14 +95,14 @@ class Ghost {
     while (bitmap.x > 540 || bitmap.x < 20) {
       bitmap.x = 600 * Math.random();
     }
-    
+
     bitmap.kill = this.kill;
     this.ghosts.push(bitmap);
-    this.ghosts.forEach( ghost => {
-      ghost.xVel = this.vel;
-      ghost.yVel = this.vel;
-      ghost.size = 17;
-    });
+    // this.ghosts.forEach( ghost => {
+    bitmap.xVel = this.vel;
+    bitmap.yVel = this.vel;
+    bitmap.size = 17;
+    // });
 
     this.stage.addChild(bitmap);
     this.stage.update();
@@ -333,13 +332,14 @@ class Game {
         obj1.yVel = yVel * -1;
       }
     }
-    debugger;
-    if (!obj2.edge && obj1.kill) {
+    // debugger;
+    if (!obj2.edge && obj1.kill && obj2.kill == undefined) {
       obj2.blocked = false;
       let id = obj2.x + "_" + obj2.y;
       this.blocked.delete(id);
       this.squares[id].graphics.beginFill(EMPTY_COLOR).drawRect(0, 0, 17, 17);
-      this.percent -= .18;
+      // debugger;
+      this.percent -= .15;
     }
   }
 
@@ -390,7 +390,7 @@ class Game {
           for (let item of this.path) {
             this.blocked.delete(item);
             this.squares[item].graphics.beginFill(EMPTY_COLOR).drawRect(0, 0, 17, 17);
-            this.percent -= .18;
+            this.percent -= .15;
           }
 
           this.path.clear();
@@ -546,7 +546,7 @@ class Game {
         this.floodZone.forEach( function(square) {
           this.squares[square].checked = false;
           this.gameView.handleFilling(square, false);
-          this.percent += .18;
+          this.percent += .15;
           this.score += (.5 * this.level);
         }.bind(this));
         this.floodZone = new Set;
@@ -564,7 +564,7 @@ class Game {
       } else if (!this.blocked.has(key) && this.squares[key].hitTest(pt.x, pt.y) ) {
         this.gameView.handleFilling(key, true);
         this.path.add(key);
-        this.percent += .18;
+        this.percent += .15;
       }
       document.getElementById("score").innerHTML = `Score: ${Math.floor(this.score)}`;
       if (!this.handlingWin) {
@@ -623,9 +623,11 @@ class Level {
     }
   }
 
+  // this.game.red_ghost = new Ghost("./lib/assets/red_ghost.png", this.stage, this.ghosts);
+  // this.game.orange_ghost = new Ghost("./lib/assets/orange_ghost.png", this.stage, this.ghosts);
+  // this.game.pinky_ghost = new Ghost("./lib/assets/pinky_ghost.png", this.stage, this.ghosts);
+
   setupLevel1() {
-    // this.game.red_ghost = new Ghost("./lib/assets/red_ghost.png", this.stage, this.ghosts);
-    // this.game.orange_ghost = new Ghost("./lib/assets/orange_ghost.png", this.stage, this.ghosts);
     this.game.pinky_ghost1 = new Ghost("./lib/assets/pinky_ghost.png", this.stage, this.ghosts, 4, false);
     this.game.pinky_ghost2 = new Ghost("./lib/assets/pinky_ghost.png", this.stage, this.ghosts, 4, false);
   }
@@ -634,12 +636,13 @@ class Level {
     this.game.pinky_ghost1 = new Ghost("./lib/assets/pinky_ghost.png", this.stage, this.ghosts, 4, false);
     this.game.pinky_ghost2 = new Ghost("./lib/assets/pinky_ghost.png", this.stage, this.ghosts, 4, false);
     this.game.red_ghost = new Ghost("./lib/assets/red_ghost.png", this.stage, this.ghosts, 4, true);
-    // this.game.orange_ghost = new Ghost("./lib/assets/orange_ghost.png", this.stage, this.ghosts);
-    // this.game.pinky_ghost = new Ghost("./lib/assets/pinky_ghost.png", this.stage, this.ghosts);
   }
 
   setupLevel3() {
-
+    this.game.pinky_ghost1 = new Ghost("./lib/assets/pinky_ghost.png", this.stage, this.ghosts, 5.5, false);
+    this.game.pinky_ghost2 = new Ghost("./lib/assets/pinky_ghost.png", this.stage, this.ghosts, 5.5, false);
+    this.game.pinky_ghost3 = new Ghost("./lib/assets/pinky_ghost.png", this.stage, this.ghosts, 5.5, false);
+    this.game.red_ghost = new Ghost("./lib/assets/red_ghost.png", this.stage, this.ghosts, 4, true);
   }
 
   setupLevel4() {
