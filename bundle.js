@@ -178,7 +178,7 @@ class Game {
     this.percent = 0;
     this.handlingWin = false;
 
-    this.pacmanImage = new Pacman("./lib/assets/pacman.png", this.stage, this);
+    this.pacmanImage = new Pacman("./lib/assets/pacman0.png", this.stage, this);
     this.red_ghost = new Ghost("./lib/assets/red_ghost.png", this.stage, this.ghosts);
     this.orange_ghost = new Ghost("./lib/assets/orange_ghost.png", this.stage, this.ghosts);
     this.pinky_ghost = new Ghost("./lib/assets/pinky_ghost.png", this.stage, this.ghosts);
