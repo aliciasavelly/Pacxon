@@ -143,6 +143,7 @@ class GameView {
 
 const Ghost = __webpack_require__(3);
 const Pacman = __webpack_require__(4);
+const Level = __webpack_require__(5);
 
 const BLOCK_COLOR = "#0800a3";
 const EMPTY_COLOR = "#282828";
@@ -182,9 +183,10 @@ class Game {
     this.handlingWin = false;
 
     this.pacmanImage = new Pacman("./lib/assets/pacman0.png", this.stage, this);
-    this.red_ghost = new Ghost("./lib/assets/red_ghost.png", this.stage, this.ghosts);
-    this.orange_ghost = new Ghost("./lib/assets/orange_ghost.png", this.stage, this.ghosts);
-    this.pinky_ghost = new Ghost("./lib/assets/pinky_ghost.png", this.stage, this.ghosts);
+    // this.red_ghost = new Ghost("./lib/assets/red_ghost.png", this.stage, this.ghosts);
+    // this.orange_ghost = new Ghost("./lib/assets/orange_ghost.png", this.stage, this.ghosts);
+    // this.pinky_ghost = new Ghost("./lib/assets/pinky_ghost.png", this.stage, this.ghosts);
+    new Level(this.level, this);
 
     this.gameView.generateGrid();
     this.addPauseListener();
@@ -678,6 +680,54 @@ class Pacman {
 }
 
 module.exports = Pacman;
+
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const Ghost = __webpack_require__(3);
+
+class Level {
+  constructor(level, game) {
+    this.level = level;
+    this.game = game;
+    this.stage = this.game.stage;
+    this.ghosts = this.game.ghosts;
+
+    if (level % 4 == 1) {
+      this.setupLevel1();
+    } else if (level % 4 == 2) {
+      this.setupLevel2();
+    } else if (level % 4 == 3) {
+      this.setupLevel3();
+    } else {
+      this.setupLevel4();
+    }
+  }
+
+  setupLevel1() {
+    this.game.red_ghost = new Ghost("./lib/assets/red_ghost.png", this.stage, this.ghosts);
+    this.game.orange_ghost = new Ghost("./lib/assets/orange_ghost.png", this.stage, this.ghosts);
+    // this.game.pinky_ghost = new Ghost("./lib/assets/pinky_ghost.png", this.stage, this.ghosts);
+  }
+
+  setupLevel2() {
+    this.game.red_ghost = new Ghost("./lib/assets/red_ghost.png", this.stage, this.ghosts);
+    this.game.orange_ghost = new Ghost("./lib/assets/orange_ghost.png", this.stage, this.ghosts);
+    this.game.pinky_ghost = new Ghost("./lib/assets/pinky_ghost.png", this.stage, this.ghosts);
+  }
+
+  setupLevel3() {
+
+  }
+
+  setupLevel4() {
+
+  }
+}
+
+module.exports = Level;
 
 
 /***/ })
