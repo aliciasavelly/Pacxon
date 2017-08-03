@@ -124,8 +124,12 @@ class GameView {
     this.blocked = new Set;
   }
 
-  handleFilling(key) {
-    this.squares[key].graphics.beginFill(BLOCK_COLOR).drawRect(0, 0, 17, 17);
+  handleFilling(key, path) {
+    if (path) {
+      this.squares[key].graphics.beginFill("#070182").drawRect(0, 0, 17, 17);
+    } else {
+      this.squares[key].graphics.beginFill(BLOCK_COLOR).drawRect(0, 0, 17, 17);
+    }
     // TODO
     // this.squares[key].blocked = true;
     this.blocked.add(key);
@@ -290,6 +294,7 @@ class Game {
         obj1.yVel = yVel * -1;
       }
     }
+    // this.path.clear();
   }
 
   testCollisionBetweenGhosts(inputGhost) {
@@ -319,9 +324,12 @@ class Game {
         if (this.path.has(key)) {
           for (let item of this.path) {
             this.blocked.delete(item);
+            // debugger;
             this.squares[item].graphics.beginFill(EMPTY_COLOR).drawRect(0, 0, 17, 17);
             this.percent -= .18;
           }
+
+          this.path.clear();
 
           this.lives -= 1;
           this.score -= (this.level * 50);
@@ -340,6 +348,7 @@ class Game {
           }
         }
         this.testHitTwoObj(inputGhost, this.squares[key]);
+        // this.path.clear();
       }
     }
   }
@@ -488,7 +497,8 @@ class Game {
         }.bind(this));
         this.floodZone.forEach( function(square) {
           this.squares[square].checked = false;
-          this.gameView.handleFilling(square);
+          this.gameView.handleFilling(square, false);
+          // debugger;
           this.percent += .18;
           this.score += (.5 * this.level);
         }.bind(this));
@@ -499,10 +509,15 @@ class Game {
           this.squares[key].checked = false;
         }
 
+        this.path.forEach(function(square) {
+          // debugger;
+          this.gameView.handleFilling(square, false);
+        }.bind(this));
+
         this.path = new Set;
       } else if (!this.blocked.has(key) && this.squares[key].hitTest(pt.x, pt.y) ) {
+        this.gameView.handleFilling(key, true);
         this.path.add(key);
-        this.gameView.handleFilling(key);
         this.percent += .18;
       }
       document.getElementById("score").innerHTML = `Score: ${Math.floor(this.score)}`;
