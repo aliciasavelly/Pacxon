@@ -63,15 +63,62 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 2);
+/******/ 	return __webpack_require__(__webpack_require__.s = 5);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
+/***/ (function(module, exports) {
+
+class Ghost {
+  constructor(src, stage, ghosts, vel, kill) {
+    this.img = new Image();
+    this.img.src = src;
+    this.stage = stage;
+    this.ghosts = ghosts;
+    this.vel = vel;
+    this.kill = kill;
+    // debugger;
+
+    this.handleImageLoad = this.handleImageLoad.bind(this);
+    this.img.onload = this.handleImageLoad;
+  }
+
+  handleImageLoad(event) {
+    let image = event.target;
+    let bitmap = new createjs.Bitmap(image);
+    bitmap.scaleX = 0.05;
+    bitmap.scaleY = 0.05;
+
+    while (bitmap.y > 355 || bitmap.y < 20) {
+      bitmap.y = 400 * Math.random();
+    }
+    while (bitmap.x > 540 || bitmap.x < 20) {
+      bitmap.x = 600 * Math.random();
+    }
+    
+    bitmap.kill = this.kill;
+    this.ghosts.push(bitmap);
+    this.ghosts.forEach( ghost => {
+      ghost.xVel = this.vel;
+      ghost.yVel = this.vel;
+      ghost.size = 17;
+    });
+
+    this.stage.addChild(bitmap);
+    this.stage.update();
+  }
+}
+
+module.exports = Ghost;
+
+
+/***/ }),
+/* 1 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-const Game = __webpack_require__(1);
+const Game = __webpack_require__(2);
 
 const BLOCK_COLOR = "#0800a3";
 const EMPTY_COLOR = "#282828";
@@ -105,6 +152,7 @@ class GameView {
           gridSquare.graphics.beginFill(BLOCK_COLOR).drawRect(0, 0, 17, 17);
           gridSquare.blocked = true;
           this.blocked.add(id);
+          gridSquare.edge = true;
         } else {
           gridSquare.graphics.beginFill(EMPTY_COLOR).drawRect(0, 0, 17, 17);
           gridSquare.blocked = false;
@@ -138,12 +186,12 @@ class GameView {
 
 
 /***/ }),
-/* 1 */
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const Ghost = __webpack_require__(3);
+const Ghost = __webpack_require__(0);
 const Pacman = __webpack_require__(4);
-const Level = __webpack_require__(5);
+const Level = __webpack_require__(3);
 
 const BLOCK_COLOR = "#0800a3";
 const EMPTY_COLOR = "#282828";
@@ -224,6 +272,7 @@ class Game {
     if (!this.paused) {
       if (this.ghosts.length > 0) {
         this.ghosts.forEach( ghost => {
+          // debugger;
           ghost.x += ghost.xVel;
           ghost.y += ghost.yVel;
           this.testGhostPacmanCollision(ghost);
@@ -283,6 +332,14 @@ class Game {
         obj1.xVel = xVel;
         obj1.yVel = yVel * -1;
       }
+    }
+    debugger;
+    if (!obj2.edge && obj1.kill) {
+      obj2.blocked = false;
+      let id = obj2.x + "_" + obj2.y;
+      this.blocked.delete(id);
+      this.squares[id].graphics.beginFill(EMPTY_COLOR).drawRect(0, 0, 17, 17);
+      this.percent -= .18;
     }
   }
 
@@ -543,61 +600,54 @@ module.exports = Game;
 
 
 /***/ }),
-/* 2 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_game_view_js__ = __webpack_require__(0);
-
-
-document.addEventListener("DOMContentLoaded", function(e) {
-  let stage = new createjs.Stage("game-canvas");
-  new __WEBPACK_IMPORTED_MODULE_0__lib_game_view_js__["a" /* default */](stage);
-});
-
-
-/***/ }),
 /* 3 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
-class Ghost {
-  constructor(src, stage, ghosts) {
-    this.img = new Image();
-    this.img.src = src;
-    this.stage = stage;
-    this.ghosts = ghosts;
+const Ghost = __webpack_require__(0);
 
-    this.handleImageLoad = this.handleImageLoad.bind(this);
-    this.img.onload = this.handleImageLoad;
+class Level {
+  constructor(level, game) {
+    this.level = level;
+    this.game = game;
+    this.stage = this.game.stage;
+    this.ghosts = this.game.ghosts;
+
+    if (level % 4 == 1) {
+      this.setupLevel1();
+    } else if (level % 4 == 2) {
+      this.setupLevel2();
+    } else if (level % 4 == 3) {
+      this.setupLevel3();
+    } else {
+      this.setupLevel4();
+    }
   }
 
-  handleImageLoad(event) {
-    let image = event.target;
-    let bitmap = new createjs.Bitmap(image);
-    bitmap.scaleX = 0.05;
-    bitmap.scaleY = 0.05;
+  setupLevel1() {
+    // this.game.red_ghost = new Ghost("./lib/assets/red_ghost.png", this.stage, this.ghosts);
+    // this.game.orange_ghost = new Ghost("./lib/assets/orange_ghost.png", this.stage, this.ghosts);
+    this.game.pinky_ghost1 = new Ghost("./lib/assets/pinky_ghost.png", this.stage, this.ghosts, 4, false);
+    this.game.pinky_ghost2 = new Ghost("./lib/assets/pinky_ghost.png", this.stage, this.ghosts, 4, false);
+  }
 
-    while (bitmap.y > 355 || bitmap.y < 20) {
-      bitmap.y = 400 * Math.random();
-    }
-    while (bitmap.x > 540 || bitmap.x < 20) {
-      bitmap.x = 600 * Math.random();
-    }
+  setupLevel2() {
+    this.game.pinky_ghost1 = new Ghost("./lib/assets/pinky_ghost.png", this.stage, this.ghosts, 4, false);
+    this.game.pinky_ghost2 = new Ghost("./lib/assets/pinky_ghost.png", this.stage, this.ghosts, 4, false);
+    this.game.red_ghost = new Ghost("./lib/assets/red_ghost.png", this.stage, this.ghosts, 4, true);
+    // this.game.orange_ghost = new Ghost("./lib/assets/orange_ghost.png", this.stage, this.ghosts);
+    // this.game.pinky_ghost = new Ghost("./lib/assets/pinky_ghost.png", this.stage, this.ghosts);
+  }
 
-    this.ghosts.push(bitmap);
-    this.ghosts.forEach( ghost => {
-      ghost.xVel = 4;
-      ghost.yVel = 4;
-      ghost.size = 17;
-    });
+  setupLevel3() {
 
-    this.stage.addChild(bitmap);
-    this.stage.update();
+  }
+
+  setupLevel4() {
+
   }
 }
 
-module.exports = Ghost;
+module.exports = Level;
 
 
 /***/ }),
@@ -684,50 +734,17 @@ module.exports = Pacman;
 
 /***/ }),
 /* 5 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-const Ghost = __webpack_require__(3);
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_game_view_js__ = __webpack_require__(1);
 
-class Level {
-  constructor(level, game) {
-    this.level = level;
-    this.game = game;
-    this.stage = this.game.stage;
-    this.ghosts = this.game.ghosts;
 
-    if (level % 4 == 1) {
-      this.setupLevel1();
-    } else if (level % 4 == 2) {
-      this.setupLevel2();
-    } else if (level % 4 == 3) {
-      this.setupLevel3();
-    } else {
-      this.setupLevel4();
-    }
-  }
-
-  setupLevel1() {
-    this.game.red_ghost = new Ghost("./lib/assets/red_ghost.png", this.stage, this.ghosts);
-    this.game.orange_ghost = new Ghost("./lib/assets/orange_ghost.png", this.stage, this.ghosts);
-    // this.game.pinky_ghost = new Ghost("./lib/assets/pinky_ghost.png", this.stage, this.ghosts);
-  }
-
-  setupLevel2() {
-    this.game.red_ghost = new Ghost("./lib/assets/red_ghost.png", this.stage, this.ghosts);
-    this.game.orange_ghost = new Ghost("./lib/assets/orange_ghost.png", this.stage, this.ghosts);
-    this.game.pinky_ghost = new Ghost("./lib/assets/pinky_ghost.png", this.stage, this.ghosts);
-  }
-
-  setupLevel3() {
-
-  }
-
-  setupLevel4() {
-
-  }
-}
-
-module.exports = Level;
+document.addEventListener("DOMContentLoaded", function(e) {
+  let stage = new createjs.Stage("game-canvas");
+  new __WEBPACK_IMPORTED_MODULE_0__lib_game_view_js__["a" /* default */](stage);
+});
 
 
 /***/ })
