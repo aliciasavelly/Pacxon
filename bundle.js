@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 4);
+/******/ 	return __webpack_require__(__webpack_require__.s = 2);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -140,8 +140,8 @@ class GameView {
 /* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const Ghost = __webpack_require__(2);
-const Pacman = __webpack_require__(3);
+const Ghost = __webpack_require__(3);
+const Pacman = __webpack_require__(4);
 
 const BLOCK_COLOR = "#0800a3";
 const EMPTY_COLOR = "#282828";
@@ -161,6 +161,7 @@ class Game {
     this.invalidSpots = new Set;
 
     this.tick = this.tick.bind(this);
+    // this.addPauseListener = this.addPauseListener.bind(this);
 
     this.setup();
   }
@@ -169,6 +170,7 @@ class Game {
     createjs.Ticker.addEventListener("tick", this.tick);
     createjs.Ticker.setFPS(30);
     this.gameView.reset();
+    // debugger;
 
     this.squares = this.gameView.squares;
     this.blocked = this.gameView.blocked;
@@ -184,6 +186,27 @@ class Game {
     this.pinky_ghost = new Ghost("./lib/assets/pinky_ghost.png", this.stage, this.ghosts);
 
     this.gameView.generateGrid();
+    this.addPauseListener();
+  }
+
+  addPauseListener() {
+    document.getElementById("pause-toggle").addEventListener("click", function() {
+      this.togglePause();
+    }.bind(this));
+    $(document).keydown(function(e) {
+      if ((e.keyCode >= 37 && e.keyCode <= 40) && this.paused) {
+        this.togglePause();
+      }
+    }.bind(this));
+  }
+
+  togglePause() {
+    this.paused = this.paused == false ? true : false;
+    document.getElementById("pause-toggle").innerHTML = (this.paused ? "Unpause" : "Pause" );
+  }
+
+  pauseToggle() {
+    console.log("pause toggle");
   }
 
   handleSetup(valid) {
@@ -199,32 +222,36 @@ class Game {
   }
 
   tick(event) {
-    if (this.ghosts.length > 0) {
-      this.ghosts.forEach( ghost => {
-        ghost.x += ghost.xVel;
-        ghost.y += ghost.yVel;
+    if (!this.paused) {
+      // console.log(this.paused);
+      // debugger;
+      if (this.ghosts.length > 0) {
+        this.ghosts.forEach( ghost => {
+          ghost.x += ghost.xVel;
+          ghost.y += ghost.yVel;
           this.testGhostPacmanCollision(ghost);
           this.testCollisionBetweenGhosts(ghost);
-      });
-    }
-
-    this.move ? this.move = false : this.move = true
-    if (this.move) {
-      if (this.arrowUp && this.pacman.y >= 17) {
-        this.pacman.y -= 17;
-      } else if (this.arrowDown && this.pacman.y <= 374) {
-        this.pacman.y += 17;
-      } else if (this.arrowLeft && this.pacman.x >= 17) {
-        this.pacman.x -= 17;
-      } else if (this.arrowRight && this.pacman.x <= 561) {
-        this.pacman.x += 17;
+        });
       }
-    }
 
-    if (this.pacman) {
-      this.testPacmanCollision(this.pacman);
+      this.move ? this.move = false : this.move = true
+      if (this.move) {
+        if (this.arrowUp && this.pacman.y >= 17) {
+          this.pacman.y -= 17;
+        } else if (this.arrowDown && this.pacman.y <= 374) {
+          this.pacman.y += 17;
+        } else if (this.arrowLeft && this.pacman.x >= 17) {
+          this.pacman.x -= 17;
+        } else if (this.arrowRight && this.pacman.x <= 561) {
+          this.pacman.x += 17;
+        }
+      }
+
+      if (this.pacman) {
+        this.testPacmanCollision(this.pacman);
+      }
+      this.stage.update();
     }
-    this.stage.update();
   }
 
   testHitTwoObj(obj1, obj2) {
@@ -487,6 +514,7 @@ class Game {
       this.level += 1;
       this.percent = 0;
       document.getElementById("congrats").innerHTML = "Congrats! You won the level!";
+      debugger;
       createjs.Ticker.removeAllEventListeners();
 
       this.handleSetup(true);
@@ -506,6 +534,21 @@ module.exports = Game;
 
 /***/ }),
 /* 2 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_game_view_js__ = __webpack_require__(0);
+
+
+document.addEventListener("DOMContentLoaded", function(e) {
+  let stage = new createjs.Stage("game-canvas");
+  new __WEBPACK_IMPORTED_MODULE_0__lib_game_view_js__["a" /* default */](stage);
+});
+
+
+/***/ }),
+/* 3 */
 /***/ (function(module, exports) {
 
 class Ghost {
@@ -548,7 +591,7 @@ module.exports = Ghost;
 
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, exports) {
 
 class Pacman {
@@ -650,21 +693,6 @@ class Pacman {
 }
 
 module.exports = Pacman;
-
-
-/***/ }),
-/* 4 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_game_view_js__ = __webpack_require__(0);
-
-
-document.addEventListener("DOMContentLoaded", function(e) {
-  let stage = new createjs.Stage("game-canvas");
-  new __WEBPACK_IMPORTED_MODULE_0__lib_game_view_js__["a" /* default */](stage);
-});
 
 
 /***/ })

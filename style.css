@@ -25,6 +25,10 @@ h1 {
   margin: 0 auto;
 }
 
+#pause-toggle {
+  cursor: pointer;
+}
+
 .canvas-div {
   width: 578px;
   height: 391px;
