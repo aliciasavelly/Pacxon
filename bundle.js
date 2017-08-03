@@ -232,10 +232,8 @@ class Game {
     let yVel = obj1.yVel;
     let ghostX = obj2.x;
     let ghostY = obj2.y;
-    let xDiff = ghostX - obj1.x;
-    let yDiff = ghostY - obj1.y;
 
-    if (Math.abs(xDiff) > Math.abs(yDiff)) {
+    if (Math.abs(ghostX - obj1.x) > Math.abs(ghostY - obj1.y)) {
       // hit right or left
       if (ghostX > obj1.x) {
         // hit left side of square
@@ -282,8 +280,7 @@ class Game {
 
   testGhostPacmanCollision(inputGhost) {
     for (let key in this.squares) {
-      if (
-        this.blocked.has(key) &&
+      if (this.blocked.has(key) &&
         inputGhost.x < this.squares[key].x + this.squares[key].size &&
         inputGhost.x + inputGhost.size > this.squares[key].x &&
         inputGhost.y < this.squares[key].y + this.squares[key].size &&
