@@ -319,6 +319,7 @@ class Game {
 
           this.lives -= 1;
           this.score -= (this.level * 50);
+          if (this.score < 0) this.score = 0;
           if (!this.handlingWin) {
             document.getElementById("percent").innerHTML = `Progress: ${Math.floor(this.percent)}/75%`
           }
