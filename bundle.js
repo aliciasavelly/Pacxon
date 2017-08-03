@@ -159,6 +159,8 @@ class Game {
     this.move = false;
     this.floodZone = new Set;
     this.invalidSpots = new Set;
+    this.paused = true;
+    this.score = 0;
 
     this.tick = this.tick.bind(this);
     // this.addPauseListener = this.addPauseListener.bind(this);
@@ -191,6 +193,7 @@ class Game {
 
   addPauseListener() {
     document.getElementById("pause-toggle").addEventListener("click", function() {
+      // console.log(52);
       this.togglePause();
     }.bind(this));
     $(document).keydown(function(e) {
@@ -202,7 +205,7 @@ class Game {
 
   togglePause() {
     this.paused = this.paused == false ? true : false;
-    document.getElementById("pause-toggle").innerHTML = (this.paused ? "Unpause" : "Pause" );
+    document.getElementById("pause-toggle").innerHTML = (this.paused ? '<i class="fa fa-play" aria-hidden="true"></i>' : '<i class="fa fa-pause" aria-hidden="true"></i>' );
   }
 
   pauseToggle() {
@@ -321,6 +324,7 @@ class Game {
           }
 
           this.lives -= 1;
+          this.score -= (this.level * 50);
           if (!this.handlingWin) {
             document.getElementById("percent").innerHTML = `Progress: ${Math.floor(this.percent)}/75%`
           }
@@ -486,6 +490,7 @@ class Game {
           this.squares[square].checked = false;
           this.gameView.handleFilling(square);
           this.percent += .18;
+          this.score += (.5 * this.level);
         }.bind(this));
         this.floodZone = new Set;
         this.invalidSpots = new Set;
@@ -500,6 +505,7 @@ class Game {
         this.gameView.handleFilling(key);
         this.percent += .18;
       }
+      document.getElementById("score").innerHTML = `Score: ${Math.floor(this.score)}`;
       if (!this.handlingWin) {
         document.getElementById("percent").innerHTML = `Progress: ${Math.floor(this.percent)}/75%`;
       }
@@ -509,12 +515,13 @@ class Game {
 
   handleLevelWin() {
     if (Math.floor(this.percent) >= 75 ) {
+      this.score += (100 * this.level);
       this.handlingWin = true;
       this.lives += 1;
       this.level += 1;
       this.percent = 0;
       document.getElementById("congrats").innerHTML = "Congrats! You won the level!";
-      debugger;
+      // debugger;
       createjs.Ticker.removeAllEventListeners();
 
       this.handleSetup(true);

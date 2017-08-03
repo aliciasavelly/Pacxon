@@ -27,6 +27,9 @@ h1 {
 
 #pause-toggle {
   cursor: pointer;
+  position: absolute;
+  top: 50px;
+  right: -35px;
 }
 
 .canvas-div {

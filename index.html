@@ -6,6 +6,7 @@
     <script type="text/javascript" src="bundle.js" charset="utf-8"></script>
     <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
     <link rel="shortcut icon" href="favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="./font-awesome-4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="style.css">
     <script src="https://code.createjs.com/easeljs-0.8.2.min.js"></script>
   </head>
@@ -21,11 +22,12 @@
       <div class="canvas-div">
         <div class="top-info-panel">
           <h3 id="lives">Lives: 3</h3>
+          <h3 id="score">Score: 0</h3>
           <h3 id="percent">Progress: 0/75%</h3>
         </div>
         <h3 id="congrats"></h3>
         <canvas id="game-canvas" width="578" height="391"></canvas>
-        <h3 id="pause-toggle">Pause</h3>
+        <h3 id="pause-toggle"><i class="fa fa-play" aria-hidden="true"></i></h3>
       </div>
     </div>
   </body>
