@@ -164,7 +164,6 @@ class Game {
     this.score = 0;
 
     this.tick = this.tick.bind(this);
-    // this.addPauseListener = this.addPauseListener.bind(this);
 
     this.setup();
   }
@@ -173,7 +172,6 @@ class Game {
     createjs.Ticker.addEventListener("tick", this.tick);
     createjs.Ticker.setFPS(30);
     this.gameView.reset();
-    // debugger;
 
     this.squares = this.gameView.squares;
     this.blocked = this.gameView.blocked;
@@ -194,7 +192,6 @@ class Game {
 
   addPauseListener() {
     document.getElementById("pause-toggle").addEventListener("click", function() {
-      // console.log(52);
       this.togglePause();
     }.bind(this));
     $(document).keydown(function(e) {
@@ -207,10 +204,6 @@ class Game {
   togglePause() {
     this.paused = this.paused == false ? true : false;
     document.getElementById("pause-toggle").innerHTML = (this.paused ? '<i class="fa fa-play" aria-hidden="true"></i>' : '<i class="fa fa-pause" aria-hidden="true"></i>' );
-  }
-
-  pauseToggle() {
-    console.log("pause toggle");
   }
 
   handleSetup(valid) {
@@ -227,8 +220,6 @@ class Game {
 
   tick(event) {
     if (!this.paused) {
-      // console.log(this.paused);
-      // debugger;
       if (this.ghosts.length > 0) {
         this.ghosts.forEach( ghost => {
           ghost.x += ghost.xVel;
@@ -291,7 +282,6 @@ class Game {
         obj1.yVel = yVel * -1;
       }
     }
-    // this.path.clear();
   }
 
   testCollisionBetweenGhosts(inputGhost) {
@@ -321,7 +311,6 @@ class Game {
         if (this.path.has(key)) {
           for (let item of this.path) {
             this.blocked.delete(item);
-            // debugger;
             this.squares[item].graphics.beginFill(EMPTY_COLOR).drawRect(0, 0, 17, 17);
             this.percent -= .18;
           }
@@ -345,7 +334,6 @@ class Game {
           }
         }
         this.testHitTwoObj(inputGhost, this.squares[key]);
-        // this.path.clear();
       }
     }
   }
@@ -495,7 +483,6 @@ class Game {
         this.floodZone.forEach( function(square) {
           this.squares[square].checked = false;
           this.gameView.handleFilling(square, false);
-          // debugger;
           this.percent += .18;
           this.score += (.5 * this.level);
         }.bind(this));
@@ -507,7 +494,6 @@ class Game {
         }
 
         this.path.forEach(function(square) {
-          // debugger;
           this.gameView.handleFilling(square, false);
         }.bind(this));
 
@@ -533,7 +519,6 @@ class Game {
       this.level += 1;
       this.percent = 0;
       document.getElementById("congrats").innerHTML = "Congrats! You won the level!";
-      // debugger;
       createjs.Ticker.removeAllEventListeners();
 
       this.handleSetup(true);
