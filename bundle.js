@@ -309,14 +309,6 @@ class Game {
         inputGhost.y + inputGhost.size > this.squares[key].y
       ) {
         if (this.path.has(key)) {
-          for (let item of this.path) {
-            this.blocked.delete(item);
-            this.squares[item].graphics.beginFill(EMPTY_COLOR).drawRect(0, 0, 17, 17);
-            this.percent -= .18;
-          }
-
-          this.path.clear();
-
           this.lives -= 1;
           this.score -= (this.level * 50);
           if (this.score < 0) this.score = 0;
@@ -327,12 +319,22 @@ class Game {
           if (this.lives < 0) {
             this.lives = 2;
             this.handleLevelLose();
+            break;
           } else {
             this.pacman.x = 7;
             this.pacman.y = 7.5;
             this.pacman.rotation = 0;
             document.getElementById("lives").innerHTML = `Lives: ${this.lives}`;
           }
+
+          for (let item of this.path) {
+            this.blocked.delete(item);
+            this.squares[item].graphics.beginFill(EMPTY_COLOR).drawRect(0, 0, 17, 17);
+            this.percent -= .18;
+          }
+
+          this.path.clear();
+
         }
         this.testHitTwoObj(inputGhost, this.squares[key]);
       }
