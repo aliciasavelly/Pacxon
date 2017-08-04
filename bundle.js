@@ -211,12 +211,13 @@ class Game {
     this.move = false;
     this.floodZone = new Set;
     this.invalidSpots = new Set;
-    this.paused = true;
+    // this.paused = true;
     this.score = 0;
 
     this.tick = this.tick.bind(this);
 
     this.setup();
+    this.addPauseListener();
   }
 
   setup() {
@@ -231,6 +232,8 @@ class Game {
     document.getElementById("lives").innerHTML = `Lives: ${this.lives}`;
     this.percent = 0;
     this.handlingWin = false;
+    this.paused = true;
+    document.getElementById("pause-toggle").innerHTML = (this.paused ? '<i class="fa fa-play" aria-hidden="true"></i>' : '<i class="fa fa-pause" aria-hidden="true"></i>' );
 
     this.pacmanImage = new Pacman("./lib/assets/pacman0.png", this.stage, this);
     // this.red_ghost = new Ghost("./lib/assets/red_ghost.png", this.stage, this.ghosts);
@@ -239,10 +242,11 @@ class Game {
     new Level(this.level, this);
 
     this.gameView.generateGrid();
-    this.addPauseListener();
+    // this.addPauseListener();
   }
 
   addPauseListener() {
+    // debugger;
     document.getElementById("pause-toggle").addEventListener("click", function() {
       this.togglePause();
     }.bind(this));
@@ -560,6 +564,7 @@ class Game {
           this.gameView.handleFilling(square, false);
           this.percent += .15;
           this.score += (.5 * this.level);
+          this.checkBonusLife();
         }.bind(this));
         this.floodZone = new Set;
         this.invalidSpots = new Set;
