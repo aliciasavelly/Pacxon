@@ -552,7 +552,7 @@ class Game {
           this.squares[square].checked = false;
           this.gameView.handleFilling(square, false);
           this.percent += .15;
-          this.score += (.5 * this.level);
+          this.score += Math.min(.5 * this.level, 2.5);
           this.checkBonusLife();
         }.bind(this));
         this.floodZone = new Set;
@@ -582,7 +582,7 @@ class Game {
 
   handleLevelWin() {
     if (Math.floor(this.percent) >= 75 ) {
-      this.score += (100 * this.level);
+      this.score += Math.min(75 * this.level, 250);
       this.checkBonusLife();
       this.handlingWin = true;
       this.lives += 1;
