@@ -287,11 +287,17 @@ class Game {
         });
       }
 
-      this.move ? this.move = false : this.move = true
+      // this.move ? this.move = false : this.move = true;
+      this.move = (this.move ? false : true);
       if (this.move) {
+        console.log(99);
+        if (this.arrowDown === true) {
+          console.log(this.arrowDown);
+        }
         if (this.arrowUp && this.pacman.y >= 17) {
           this.pacman.y -= 17;
         } else if (this.arrowDown && this.pacman.y <= 374) {
+          console.log(102);
           this.pacman.y += 17;
         } else if (this.arrowLeft && this.pacman.x >= 17) {
           this.pacman.x -= 17;
@@ -702,6 +708,7 @@ class Pacman {
     this.stage = stage;
     this.game = game;
     this.gameView = this.game.gameView;
+    this.keysDown = new Set;
 
     this.handleImageLoad = this.handleImageLoad.bind(this);
     this.img.onload = this.handleImageLoad;
@@ -729,31 +736,42 @@ class Pacman {
       }.bind(this));
 
       $(document).keyup(function(e) {
-        this.handleKeyup();
+        this.handleKeyup(e);
       }.bind(this));
     }
   }
 
   handleKeydown(event) {
+    // debugger;
     if (event.key === "ArrowUp" && this.game.pacman.y >= 17) {
+      console.log(event.key);
+      this.keysDown.add("ArrowUp");
       this.game.pacman.rotation = -90;
       this.game.arrowUp = true;
       this.game.arrowDown = false;
       this.game.arrowLeft = false;
       this.game.arrowRight = false;
     } else if (event.key === "ArrowDown" && this.game.pacman.y <= 374) {
+      console.log(event.key);
+      this.keysDown.add("ArrowDown");
+      // debugger;
       this.game.pacman.rotation = 90;
       this.game.arrowUp = false;
       this.game.arrowDown = true;
       this.game.arrowLeft = false;
       this.game.arrowRight = false;
+      console.log(this.game.arrowDown);
     } else if (event.key === "ArrowRight" && this.game.pacman.x <= 561) {
+      console.log(event.key);
+      this.keysDown.add("ArrowRight");
       this.game.pacman.rotation = 0;
       this.game.arrowUp = false;
       this.game.arrowDown = false;
       this.game.arrowLeft = false;
       this.game.arrowRight = true;
     } else if (event.key === "ArrowLeft" && this.game.pacman.x >= 17) {
+      console.log(event.key);
+      this.keysDown.add("ArrowLeft");
       this.game.pacman.rotation = 180;
       this.game.arrowUp = false;
       this.game.arrowDown = false;
@@ -762,11 +780,17 @@ class Pacman {
     }
   }
 
-  handleKeyup() {
-    this.game.arrowUp = false;
-    this.game.arrowDown = false;
-    this.game.arrowLeft = false;
-    this.game.arrowRight = false;
+  handleKeyup(event) {
+    // debugger;
+    // console.log(event.key);
+    // console.log(76);
+    this.keysDown.delete(event.key);
+    if (this.keysDown.size == 0) {
+      this.game.arrowUp = false;
+      this.game.arrowDown = false;
+      this.game.arrowLeft = false;
+      this.game.arrowRight = false;
+    }
   }
 }
 
