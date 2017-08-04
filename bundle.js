@@ -213,6 +213,7 @@ class Game {
     this.invalidSpots = new Set;
     // this.paused = true;
     this.score = 0;
+    this.lastGreatestScore = 0;
 
     this.tick = this.tick.bind(this);
 
@@ -383,7 +384,7 @@ class Game {
       ) {
         if (this.path.has(key)) {
           this.lives -= 1;
-          this.score -= (this.level * 50);
+          this.score -= (this.level * 25);
           if (this.score < 0) this.score = 0;
 
           if (!this.handlingWin) {
@@ -594,6 +595,7 @@ class Game {
   handleLevelWin() {
     if (Math.floor(this.percent) >= 75 ) {
       this.score += (100 * this.level);
+      this.checkBonusLife();
       this.handlingWin = true;
       this.lives += 1;
       this.level += 1;
@@ -611,6 +613,18 @@ class Game {
     createjs.Ticker.removeAllEventListeners();
 
     this.handleSetup(true);
+  }
+
+  checkBonusLife() {
+    if (this.lastGreatestScore < Math.floor(this.score / 1000)) {
+      this.lastGreatestScore += 1;
+      this.lives += 1;
+      document.getElementById("bonus-life").innerHTML = "Extra life!";
+      document.getElementById("lives").innerHTML = `Lives: ${this.lives}`;
+      setTimeout(function() {
+        document.getElementById("bonus-life").innerHTML = "";
+      }.bind(this), 1300);
+    }
   }
 }
 

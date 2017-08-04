@@ -65,6 +65,18 @@ h1 {
   font-size: 35px;
 }
 
+#bonus-life {
+  position: absolute;
+  top: 330px;
+  left: 40px;
+  width: 100%;
+  color: red;
+  font-size: 20px;
+  -ms-transform: rotate(-7deg); /* IE 9 */
+  -webkit-transform: rotate(-7deg); /* Chrome, Safari, Opera */
+  transform: rotate(-7deg);
+}
+
 @media (max-width: 1250px) {
   .instructions-container {
     position: relative;
