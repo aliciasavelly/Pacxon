@@ -211,7 +211,6 @@ class Game {
     this.move = false;
     this.floodZone = new Set;
     this.invalidSpots = new Set;
-    // this.paused = true;
     this.score = 0;
     this.lastGreatestScore = 0;
 
@@ -237,17 +236,12 @@ class Game {
     document.getElementById("pause-toggle").innerHTML = (this.paused ? '<i class="fa fa-play" aria-hidden="true"></i>' : '<i class="fa fa-pause" aria-hidden="true"></i>' );
 
     this.pacmanImage = new Pacman("./lib/assets/pacman0.png", this.stage, this);
-    // this.red_ghost = new Ghost("./lib/assets/red_ghost.png", this.stage, this.ghosts);
-    // this.orange_ghost = new Ghost("./lib/assets/orange_ghost.png", this.stage, this.ghosts);
-    // this.pinky_ghost = new Ghost("./lib/assets/pinky_ghost.png", this.stage, this.ghosts);
     new Level(this.level, this);
 
     this.gameView.generateGrid();
-    // this.addPauseListener();
   }
 
   addPauseListener() {
-    // debugger;
     document.getElementById("pause-toggle").addEventListener("click", function() {
       this.togglePause();
     }.bind(this));
@@ -279,7 +273,6 @@ class Game {
     if (!this.paused) {
       if (this.ghosts.length > 0) {
         this.ghosts.forEach( ghost => {
-          // debugger;
           ghost.x += ghost.xVel;
           ghost.y += ghost.yVel;
           this.testGhostPacmanCollision(ghost);
@@ -287,8 +280,7 @@ class Game {
         });
       }
 
-      // this.move ? this.move = false : this.move = true;
-      this.move = (this.move ? false : true);
+      this.move = !this.move;
       if (this.move) {
         console.log(99);
         if (this.arrowDown === true) {
@@ -313,7 +305,6 @@ class Game {
     }
   }
 
-//COLLISION!
   testHitTwoObj(obj1, obj2, cont = true) {
     if (obj1.kill != undefined && obj2.kill != undefined && cont) {
       this.testHitTwoObj(obj2, obj1, false);
@@ -351,18 +342,15 @@ class Game {
         obj1.yVel = yVel * -1;
       }
     }
-    // debugger;
     if (!obj2.edge && obj1.kill && obj2.kill == undefined) {
       obj2.blocked = false;
       let id = obj2.x + "_" + obj2.y;
       this.blocked.delete(id);
       this.squares[id].graphics.beginFill(EMPTY_COLOR).drawRect(0, 0, 17, 17);
-      // debugger;
       this.percent -= .15;
     }
   }
 
-//COLLISION!
   testCollisionBetweenGhosts(inputGhost) {
     for (let i = 0; i < this.ghosts.length; i++) {
       let ghost = this.ghosts[i];
@@ -379,7 +367,6 @@ class Game {
     }
   }
 
-//COLLISION!
   testGhostPacmanCollision(inputGhost) {
     for (let key in this.squares) {
       if (this.blocked.has(key) &&
@@ -422,7 +409,6 @@ class Game {
     }
   }
 
-//COLLISION!
   testGhostBlockCollision(block, ghost) {
     return (this.squares[block].checked === false &&
      (ghost.x < this.squares[block].x + this.squares[block].size &&
@@ -530,7 +516,6 @@ class Game {
     return right.join("_");
   }
 
-// COLLISION!
   testPacmanCollision(pacman) {
     for (let key in this.squares) {
       let pt = this.squares[key].globalToLocal(pacman.x, pacman.y);
@@ -742,9 +727,7 @@ class Pacman {
   }
 
   handleKeydown(event) {
-    // debugger;
     if (event.key === "ArrowUp" && this.game.pacman.y >= 17) {
-      console.log(event.key);
       this.keysDown.add("ArrowUp");
       this.game.pacman.rotation = -90;
       this.game.arrowUp = true;
@@ -752,17 +735,13 @@ class Pacman {
       this.game.arrowLeft = false;
       this.game.arrowRight = false;
     } else if (event.key === "ArrowDown" && this.game.pacman.y <= 374) {
-      console.log(event.key);
       this.keysDown.add("ArrowDown");
-      // debugger;
       this.game.pacman.rotation = 90;
       this.game.arrowUp = false;
       this.game.arrowDown = true;
       this.game.arrowLeft = false;
       this.game.arrowRight = false;
-      console.log(this.game.arrowDown);
     } else if (event.key === "ArrowRight" && this.game.pacman.x <= 561) {
-      console.log(event.key);
       this.keysDown.add("ArrowRight");
       this.game.pacman.rotation = 0;
       this.game.arrowUp = false;
@@ -770,7 +749,6 @@ class Pacman {
       this.game.arrowLeft = false;
       this.game.arrowRight = true;
     } else if (event.key === "ArrowLeft" && this.game.pacman.x >= 17) {
-      console.log(event.key);
       this.keysDown.add("ArrowLeft");
       this.game.pacman.rotation = 180;
       this.game.arrowUp = false;
@@ -781,9 +759,6 @@ class Pacman {
   }
 
   handleKeyup(event) {
-    // debugger;
-    // console.log(event.key);
-    // console.log(76);
     this.keysDown.delete(event.key);
     if (this.keysDown.size == 0) {
       this.game.arrowUp = false;
