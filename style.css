@@ -36,11 +36,6 @@ h1 {
   width: 578px;
   height: 391px;
   position: relative;
-  /*justify-content: center;*/
-  /*align-items: center;*/
-  /*align-content: center;*/
-  /*vertical-align: middle;*/
-  /*line-height: 200px;*/
   /*background-image: url("/lib/assets/space.png");*/
 }
 
@@ -72,8 +67,8 @@ h1 {
   width: 100%;
   color: red;
   font-size: 20px;
-  -ms-transform: rotate(-7deg); /* IE 9 */
-  -webkit-transform: rotate(-7deg); /* Chrome, Safari, Opera */
+  -ms-transform: rotate(-7deg);
+  -webkit-transform: rotate(-7deg);
   transform: rotate(-7deg);
 }
 
