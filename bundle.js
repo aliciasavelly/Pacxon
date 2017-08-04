@@ -204,10 +204,7 @@ class Game {
     this.gameView = gameView;
     this.lives = 2;
     this.level = 1;
-    this.arrowUp = false;
-    this.arrowDown = false;
-    this.arrowLeft = false;
-    this.arrowRight = false;
+    this.currentArrow = null;
     this.move = false;
     this.floodZone = new Set;
     this.invalidSpots = new Set;
@@ -246,6 +243,11 @@ class Game {
       this.togglePause();
     }.bind(this));
     $(document).keydown(function(e) {
+      if (e.keyCode === 32) {
+        this.togglePause();
+      }
+    }.bind(this));
+    $(document).keydown(function(e) {
       if ((e.keyCode >= 37 && e.keyCode <= 40) && this.paused) {
         this.togglePause();
       }
@@ -282,18 +284,13 @@ class Game {
 
       this.move = !this.move;
       if (this.move) {
-        console.log(99);
-        if (this.arrowDown === true) {
-          console.log(this.arrowDown);
-        }
-        if (this.arrowUp && this.pacman.y >= 17) {
+        if (this.currentArrow === "up" && this.pacman.y >= 17) {
           this.pacman.y -= 17;
-        } else if (this.arrowDown && this.pacman.y <= 374) {
-          console.log(102);
+        } else if (this.currentArrow === "down" && this.pacman.y <= 374) {
           this.pacman.y += 17;
-        } else if (this.arrowLeft && this.pacman.x >= 17) {
+        } else if (this.currentArrow === "left" && this.pacman.x >= 17) {
           this.pacman.x -= 17;
-        } else if (this.arrowRight && this.pacman.x <= 561) {
+        } else if (this.currentArrow === "right" && this.pacman.x <= 561) {
           this.pacman.x += 17;
         }
       }
@@ -730,41 +727,26 @@ class Pacman {
     if (event.key === "ArrowUp" && this.game.pacman.y >= 17) {
       this.keysDown.add("ArrowUp");
       this.game.pacman.rotation = -90;
-      this.game.arrowUp = true;
-      this.game.arrowDown = false;
-      this.game.arrowLeft = false;
-      this.game.arrowRight = false;
+      this.game.currentArrow = "up";
     } else if (event.key === "ArrowDown" && this.game.pacman.y <= 374) {
       this.keysDown.add("ArrowDown");
       this.game.pacman.rotation = 90;
-      this.game.arrowUp = false;
-      this.game.arrowDown = true;
-      this.game.arrowLeft = false;
-      this.game.arrowRight = false;
+      this.game.currentArrow = "down";
     } else if (event.key === "ArrowRight" && this.game.pacman.x <= 561) {
       this.keysDown.add("ArrowRight");
       this.game.pacman.rotation = 0;
-      this.game.arrowUp = false;
-      this.game.arrowDown = false;
-      this.game.arrowLeft = false;
-      this.game.arrowRight = true;
+      this.game.currentArrow = "right";
     } else if (event.key === "ArrowLeft" && this.game.pacman.x >= 17) {
       this.keysDown.add("ArrowLeft");
       this.game.pacman.rotation = 180;
-      this.game.arrowUp = false;
-      this.game.arrowDown = false;
-      this.game.arrowLeft = true;
-      this.game.arrowRight = false;
+      this.game.currentArrow = "left";
     }
   }
 
   handleKeyup(event) {
     this.keysDown.delete(event.key);
     if (this.keysDown.size == 0) {
-      this.game.arrowUp = false;
-      this.game.arrowDown = false;
-      this.game.arrowLeft = false;
-      this.game.arrowRight = false;
+      this.game.currentArrow = null;
     }
   }
 }
