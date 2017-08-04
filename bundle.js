@@ -302,7 +302,12 @@ class Game {
     }
   }
 
-  testHitTwoObj(obj1, obj2) {
+//COLLISION!
+  testHitTwoObj(obj1, obj2, cont = true) {
+    if (obj1.kill != undefined && obj2.kill != undefined && cont) {
+      this.testHitTwoObj(obj2, obj1, false);
+    }
+
     let xVel = obj1.xVel;
     let yVel = obj1.yVel;
     let ghostX = obj2.x;
@@ -346,6 +351,7 @@ class Game {
     }
   }
 
+//COLLISION!
   testCollisionBetweenGhosts(inputGhost) {
     for (let i = 0; i < this.ghosts.length; i++) {
       let ghost = this.ghosts[i];
@@ -362,6 +368,7 @@ class Game {
     }
   }
 
+//COLLISION!
   testGhostPacmanCollision(inputGhost) {
     for (let key in this.squares) {
       if (this.blocked.has(key) &&
@@ -404,6 +411,7 @@ class Game {
     }
   }
 
+//COLLISION!
   testGhostBlockCollision(block, ghost) {
     return (this.squares[block].checked === false &&
      (ghost.x < this.squares[block].x + this.squares[block].size &&
@@ -511,6 +519,7 @@ class Game {
     return right.join("_");
   }
 
+// COLLISION!
   testPacmanCollision(pacman) {
     for (let key in this.squares) {
       let pt = this.squares[key].globalToLocal(pacman.x, pacman.y);
