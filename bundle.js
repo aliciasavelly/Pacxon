@@ -71,13 +71,14 @@
 /***/ (function(module, exports) {
 
 class Ghost {
-  constructor(src, stage, ghosts, vel, kill) {
+  constructor(src, stage, ghosts, vel, kill, size) {
     this.img = new Image();
     this.img.src = src;
     this.stage = stage;
     this.ghosts = ghosts;
     this.vel = vel;
     this.kill = kill;
+    this.size = size;
 
     this.handleImageLoad = this.handleImageLoad.bind(this);
     this.img.onload = this.handleImageLoad;
@@ -86,8 +87,10 @@ class Ghost {
   handleImageLoad(event) {
     let image = event.target;
     let bitmap = new createjs.Bitmap(image);
-    bitmap.scaleX = 0.05;
-    bitmap.scaleY = 0.05;
+    // bitmap.scaleX = 0.05;
+    // bitmap.scaleY = 0.05;
+    bitmap.scaleX = this.size;
+    bitmap.scaleY = this.size;
 
     while (bitmap.y > 355 || bitmap.y < 20) {
       bitmap.y = 400 * Math.random();
@@ -101,7 +104,7 @@ class Ghost {
     // this.ghosts.forEach( ghost => {
     bitmap.xVel = this.vel;
     bitmap.yVel = this.vel;
-    bitmap.size = 17;
+    bitmap.size = 340 * this.size;
     // });
 
     this.stage.addChild(bitmap);
@@ -582,6 +585,7 @@ class Game {
       this.level += 1;
       this.percent = 0;
       document.getElementById("congrats").innerHTML = "Congrats! You won the level!";
+      document.getElementById("level").innerHTML = `Level: ${this.level}`;
       createjs.Ticker.removeAllEventListeners();
 
       this.handleSetup(true);
@@ -612,14 +616,16 @@ class Level {
     this.stage = this.game.stage;
     this.ghosts = this.game.ghosts;
 
-    if (level % 4 == 1) {
+    if (level % 5 == 1) {
       this.setupLevel1();
-    } else if (level % 4 == 2) {
+    } else if (level % 5 == 2) {
       this.setupLevel2();
-    } else if (level % 4 == 3) {
+    } else if (level % 5 == 3) {
       this.setupLevel3();
-    } else {
+    } else if (level % 4 == 4) {
       this.setupLevel4();
+    } else {
+      this.setupLevel5();
     }
   }
 
@@ -628,25 +634,34 @@ class Level {
   // this.game.pinky_ghost = new Ghost("./lib/assets/pinky_ghost.png", this.stage, this.ghosts);
 
   setupLevel1() {
-    this.game.pinky_ghost1 = new Ghost("./lib/assets/pinky_ghost.png", this.stage, this.ghosts, 4, false);
-    this.game.pinky_ghost2 = new Ghost("./lib/assets/pinky_ghost.png", this.stage, this.ghosts, 4, false);
+    this.game.pinky_ghost1 = new Ghost("./lib/assets/pinky_ghost.png", this.stage, this.ghosts, 4, false, .05);
+    this.game.pinky_ghost2 = new Ghost("./lib/assets/pinky_ghost.png", this.stage, this.ghosts, 4, false, .05);
   }
 
   setupLevel2() {
-    this.game.pinky_ghost1 = new Ghost("./lib/assets/pinky_ghost.png", this.stage, this.ghosts, 4, false);
-    this.game.pinky_ghost2 = new Ghost("./lib/assets/pinky_ghost.png", this.stage, this.ghosts, 4, false);
-    this.game.red_ghost = new Ghost("./lib/assets/red_ghost.png", this.stage, this.ghosts, 4, true);
+    this.game.pinky_ghost1 = new Ghost("./lib/assets/pinky_ghost.png", this.stage, this.ghosts, 4, false, .05);
+    this.game.pinky_ghost2 = new Ghost("./lib/assets/pinky_ghost.png", this.stage, this.ghosts, 4, false, .05);
+    this.game.red_ghost = new Ghost("./lib/assets/red_ghost.png", this.stage, this.ghosts, 4, true, .05);
   }
 
   setupLevel3() {
-    this.game.pinky_ghost1 = new Ghost("./lib/assets/pinky_ghost.png", this.stage, this.ghosts, 5.5, false);
-    this.game.pinky_ghost2 = new Ghost("./lib/assets/pinky_ghost.png", this.stage, this.ghosts, 5.5, false);
-    this.game.pinky_ghost3 = new Ghost("./lib/assets/pinky_ghost.png", this.stage, this.ghosts, 5.5, false);
-    this.game.red_ghost = new Ghost("./lib/assets/red_ghost.png", this.stage, this.ghosts, 4, true);
+    this.game.pinky_ghost1 = new Ghost("./lib/assets/pinky_ghost.png", this.stage, this.ghosts, 5.5, false, .05);
+    this.game.pinky_ghost2 = new Ghost("./lib/assets/pinky_ghost.png", this.stage, this.ghosts, 5.5, false, .05);
+    this.game.orange_ghost = new Ghost("./lib/assets/orange_ghost.png", this.stage, this.ghosts, 4, false, .08);
+    this.game.red_ghost = new Ghost("./lib/assets/red_ghost.png", this.stage, this.ghosts, 4, true, .05);
   }
 
   setupLevel4() {
+    this.game.orange_ghost1 = new Ghost("./lib/assets/orange_ghost.png", this.stage, this.ghosts, 4, false, .08);
+    this.game.orange_ghost2 = new Ghost("./lib/assets/orange_ghost.png", this.stage, this.ghosts, 4, false, .08);
+    this.game.red_ghost = new Ghost("./lib/assets/red_ghost.png", this.stage, this.ghosts, 4, true, .05);
+  }
 
+  setupLevel5() {
+    this.game.pinky_ghost = new Ghost("./lib/assets/pinky_ghost.png", this.stage, this.ghosts, 6.5, false, .05);
+    this.game.orange_ghost = new Ghost("./lib/assets/orange_ghost.png", this.stage, this.ghosts, 4, false, .08);
+    this.game.red_ghost1 = new Ghost("./lib/assets/red_ghost.png", this.stage, this.ghosts, 4, true, .05);
+    this.game.red_ghost2 = new Ghost("./lib/assets/red_ghost.png", this.stage, this.ghosts, 4, true, .05);
   }
 }
 
