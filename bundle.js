@@ -162,7 +162,7 @@ class GameView {
         this.squares[id] = gridSquare;
       }
     }
-    debugger;
+    // debugger;
     this.stage.update();
   }
 
