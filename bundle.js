@@ -231,8 +231,6 @@ class Game {
 
     this.pacmanImage = new Pacman("./lib/assets/pacman0.png", this.stage, this);
     new Level(this.level, this)[`setupLevel${this.level}`]();
-    // this.newlevel[`setupLevel${this.level}`]();
-    // debugger;
 
     this.gameView.generateGrid();
   }
@@ -634,26 +632,6 @@ class Level {
     this.game = game;
     this.stage = this.game.stage;
     this.ghosts = this.game.ghosts;
-
-    // switch (level % 6) {
-    //   case 1:
-    //     this.setupLevel1();
-    //     break;
-    //   case 2:
-    //     this.setupLevel2();
-    //     break;
-    //   case 3:
-    //     this.setupLevel3();
-    //     break;
-    //   case 4:
-    //     this.setupLevel4();
-    //     break;
-    //   case 5:
-    //     this.setupLevel5();
-    //     break;
-    //   default:
-    //     this.setupLevel6();
-    // }
   }
 
   setupLevel1() {
