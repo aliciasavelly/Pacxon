@@ -84,8 +84,8 @@ class Ghost {
     this.img.onload = this.handleImageLoad;
   }
 
-  handleImageLoad(event) {
-    let bitmap = new createjs.Bitmap(event.target);
+  handleImageLoad(e) {
+    let bitmap = new createjs.Bitmap(e.target);
     bitmap.scaleX = this.scale;
     bitmap.scaleY = this.scale;
 
