@@ -71,14 +71,14 @@
 /***/ (function(module, exports) {
 
 class Ghost {
-  constructor(src, stage, ghosts, vel, kill, size) {
+  constructor(src, stage, ghosts, vel, kill, scale) {
     this.img = new Image();
     this.img.src = src;
     this.stage = stage;
     this.ghosts = ghosts;
     this.vel = vel;
     this.kill = kill;
-    this.size = size;
+    this.scale = scale;
 
     this.handleImageLoad = this.handleImageLoad.bind(this);
     this.img.onload = this.handleImageLoad;
@@ -87,10 +87,8 @@ class Ghost {
   handleImageLoad(event) {
     let image = event.target;
     let bitmap = new createjs.Bitmap(image);
-    // bitmap.scaleX = 0.05;
-    // bitmap.scaleY = 0.05;
-    bitmap.scaleX = this.size;
-    bitmap.scaleY = this.size;
+    bitmap.scaleX = this.scale;
+    bitmap.scaleY = this.scale;
 
     while (bitmap.y > 355 || bitmap.y < 20) {
       bitmap.y = 400 * Math.random();
@@ -101,11 +99,9 @@ class Ghost {
 
     bitmap.kill = this.kill;
     this.ghosts.push(bitmap);
-    // this.ghosts.forEach( ghost => {
     bitmap.xVel = this.vel;
     bitmap.yVel = this.vel;
     bitmap.size = 340 * this.size;
-    // });
 
     this.stage.addChild(bitmap);
     this.stage.update();
@@ -166,6 +162,7 @@ class GameView {
         this.squares[id] = gridSquare;
       }
     }
+    debugger;
     this.stage.update();
   }
 
@@ -349,6 +346,7 @@ class Game {
   }
 
   testCollisionBetweenGhosts(inputGhost) {
+    // debugger;
     for (let i = 0; i < this.ghosts.length; i++) {
       let ghost = this.ghosts[i];
       if (ghost === inputGhost) break;
@@ -407,6 +405,7 @@ class Game {
   }
 
   testGhostBlockCollision(block, ghost) {
+    // debugger;
     return (this.squares[block].checked === false &&
      (ghost.x < this.squares[block].x + this.squares[block].size &&
       ghost.x + ghost.size > this.squares[block].x &&
@@ -430,6 +429,8 @@ class Game {
     let right = this.right(block_arr);
 
     this.ghosts.forEach( function(ghost) {
+      // debugger;
+
       if (this.testGhostBlockCollision(key, ghost) ||
           this.testGhostBlockCollision(top, ghost) ||
           this.testGhostBlockCollision(bottom, ghost) ||
@@ -654,8 +655,8 @@ class Level {
   }
 
   setupLevel1() {
-    new Ghost("./lib/assets/pinky_ghost.png", this.stage, this.ghosts, 4, false, .05);
-    new Ghost("./lib/assets/pinky_ghost.png", this.stage, this.ghosts, 4, false, .05);
+    new Ghost("./lib/assets/pinky_ghost.png", this.stage, this.ghosts, -4, false, .05);
+    new Ghost("./lib/assets/pinky_ghost.png", this.stage, this.ghosts, -4, false, .05);
   }
 
   setupLevel2() {
