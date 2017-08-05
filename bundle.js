@@ -101,7 +101,7 @@ class Ghost {
     this.ghosts.push(bitmap);
     bitmap.xVel = this.vel;
     bitmap.yVel = this.vel;
-    bitmap.size = 340 * this.size;
+    bitmap.size = 340 * this.scale;
 
     this.stage.addChild(bitmap);
     this.stage.update();
