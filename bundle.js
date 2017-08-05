@@ -718,20 +718,28 @@ class Pacman {
   handleKeydown(event) {
     if (event.key === "ArrowUp" && this.game.pacman.y >= 17) {
       this.keysDown.add("ArrowUp");
-      this.game.pacman.rotation = -90;
       this.game.currentArrow = "up";
+      if (this.pacman.rotation != -90) {
+        this.pacman.rotation = -90;
+      }
     } else if (event.key === "ArrowDown" && this.game.pacman.y <= 374) {
       this.keysDown.add("ArrowDown");
-      this.game.pacman.rotation = 90;
       this.game.currentArrow = "down";
+      if (this.pacman.rotation != 90) {
+        this.pacman.rotation = 90;
+      }
     } else if (event.key === "ArrowRight" && this.game.pacman.x <= 561) {
       this.keysDown.add("ArrowRight");
-      this.game.pacman.rotation = 0;
       this.game.currentArrow = "right";
+      if (this.pacman.rotation != 0) {
+        this.pacman.rotation = 0;
+      }
     } else if (event.key === "ArrowLeft" && this.game.pacman.x >= 17) {
       this.keysDown.add("ArrowLeft");
-      this.game.pacman.rotation = 180;
       this.game.currentArrow = "left";
+      if (this.pacman.rotation != 180) {
+        this.pacman.rotation = 180;
+      }
     }
   }
 
