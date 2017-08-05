@@ -132,14 +132,13 @@ class GameView {
 
   generateGrid() {
     this.stage.removeAllChildren();
-    let gridSquare;
 
     for (let x = 0; x < 34; x ++) {
       for (let y = 0; y < 23; y++) {
-        gridSquare = new createjs.Shape();
+        let gridSquare = new createjs.Shape();
         gridSquare.graphics.beginStroke("#000");
-        gridSquare.graphics.setStrokeStyle(1);
-        gridSquare.snapToPixel = true;
+        // gridSquare.graphics.setStrokeStyle(1);
+        // gridSquare.snapToPixel = true;
         gridSquare.x = x * 17;
         gridSquare.y = y * 17;
         gridSquare.size = 17;
@@ -147,13 +146,10 @@ class GameView {
         let id = gridSquare.x + "_" + gridSquare.y;
         if (gridSquare.x === 0 || gridSquare.x === 561 || gridSquare.y === 0 || gridSquare.y === 374) {
           gridSquare.graphics.beginFill(BLOCK_COLOR).drawRect(0, 0, 17, 17);
-          gridSquare.blocked = true;
           this.blocked.add(id);
           gridSquare.edge = true;
         } else {
           gridSquare.graphics.beginFill(EMPTY_COLOR).drawRect(0, 0, 17, 17);
-          gridSquare.blocked = false;
-          this.blocked.delete(gridSquare);
         }
 
         gridSquare.checked = false;
@@ -161,7 +157,6 @@ class GameView {
         this.squares[id] = gridSquare;
       }
     }
-    // debugger;
     this.stage.update();
   }
 
@@ -523,6 +518,7 @@ class Game {
         this.path.forEach( function(square) {
           this.floodFill(square, true);
         }.bind(this));
+        this.handleLevelWin();
 
         this.invalidSpots.forEach( function(spot)  {
           let block_arr = spot.split("_");
@@ -576,7 +572,7 @@ class Game {
       if (!this.handlingWin) {
         document.getElementById("percent").innerHTML = `Progress: ${Math.floor(this.percent)}/75%`;
       }
-      this.handleLevelWin();
+      // this.handleLevelWin();
     }
   }
 
