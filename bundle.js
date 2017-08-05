@@ -220,7 +220,7 @@ class Game {
     this.percent = 0;
     this.handlingWin = false;
     this.paused = true;
-    document.getElementById("lives").innerHTML = `Lives: ${this.lives}`;
+    this.updateLives();
     document.getElementById("pause-toggle").innerHTML = (this.paused ? '<i class="fa fa-play" aria-hidden="true"></i>' : '<i class="fa fa-pause" aria-hidden="true"></i>' );
 
     this.pacmanImage = new Pacman("./lib/assets/pacman0.png", this.stage, this);
@@ -380,7 +380,7 @@ class Game {
             this.pacman.x = 7;
             this.pacman.y = 7.5;
             this.pacman.rotation = 0;
-            document.getElementById("lives").innerHTML = `Lives: ${this.lives}`;
+            this.updateLives();
           }
 
           for (let item of this.path) {
@@ -600,11 +600,15 @@ class Game {
       this.lastGreatestScore += 1;
       this.lives += 1;
       document.getElementById("bonus-life").innerHTML = "Extra life!";
-      document.getElementById("lives").innerHTML = `Lives: ${this.lives}`;
+      this.updateLives();
       setTimeout(function() {
         document.getElementById("bonus-life").innerHTML = "";
       }.bind(this), 1300);
     }
+  }
+
+  updateLives() {
+    document.getElementById("lives").innerHTML = `Lives: ${this.lives}`;
   }
 }
 
