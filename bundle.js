@@ -340,7 +340,6 @@ class Game {
   }
 
   testCollisionBetweenGhosts(inputGhost) {
-    // debugger;
     for (let i = 0; i < this.ghosts.length; i++) {
       let ghost = this.ghosts[i];
       if (ghost === inputGhost) break;
@@ -399,7 +398,6 @@ class Game {
   }
 
   testGhostBlockCollision(block, ghost) {
-    // debugger;
     return (this.squares[block].checked === false &&
      (ghost.x < this.squares[block].x + this.squares[block].size &&
       ghost.x + ghost.size > this.squares[block].x &&
@@ -423,7 +421,6 @@ class Game {
     let right = this.right(block_arr);
 
     this.ghosts.forEach( function(ghost) {
-      // debugger;
 
       if (this.testGhostBlockCollision(key, ghost) ||
           this.testGhostBlockCollision(top, ghost) ||
@@ -572,7 +569,6 @@ class Game {
       if (!this.handlingWin) {
         document.getElementById("percent").innerHTML = `Progress: ${Math.floor(this.percent)}/75%`;
       }
-      // this.handleLevelWin();
     }
   }
 
