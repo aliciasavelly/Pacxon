@@ -221,6 +221,7 @@ class Game {
     this.handlingWin = false;
     this.paused = true;
     this.updateLives();
+    document.getElementById("percent").innerHTML = `Progress: ${Math.floor(this.percent)}/75%`;
     document.getElementById("pause-toggle").innerHTML = (this.paused ? '<i class="fa fa-play" aria-hidden="true"></i>' : '<i class="fa fa-pause" aria-hidden="true"></i>' );
 
     this.pacmanImage = new Pacman("./lib/assets/pacman0.png", this.stage, this);
@@ -333,7 +334,7 @@ class Game {
     if (!obj2.edge && obj1.kill && obj2.kill == undefined) {
       obj2.blocked = false;
       this.percent -= .15;
-      
+
       let id = obj2.x + "_" + obj2.y;
       this.blocked.delete(id);
       this.squares[id].graphics.beginFill(EMPTY_COLOR).drawRect(0, 0, 17, 17);
@@ -516,7 +517,8 @@ class Game {
         this.path.forEach( function(square) {
           this.floodFill(square, true);
         }.bind(this));
-        this.handleLevelWin();
+        // debugger;
+        // this.handleLevelWin();
 
         this.invalidSpots.forEach( function(spot)  {
           let block_arr = spot.split("_");
@@ -561,6 +563,7 @@ class Game {
         }.bind(this));
 
         this.path = new Set;
+        this.handleLevelWin();
       } else if (!this.blocked.has(key) && this.squares[key].hitTest(pt.x, pt.y) ) {
         this.gameView.handleFilling(key, true);
         this.path.add(key);
@@ -568,18 +571,21 @@ class Game {
       }
       document.getElementById("score").innerHTML = `Score: ${Math.floor(this.score)}`;
       if (!this.handlingWin) {
+      // debugger;
         document.getElementById("percent").innerHTML = `Progress: ${Math.floor(this.percent)}/75%`;
       }
     }
   }
 
   handleLevelWin() {
-    if (Math.floor(this.percent) >= 75 ) {
+    if (Math.floor(this.percent) >= 20 ) {
+      // debugger;
       this.score += Math.min(75 * this.level, 250);
       this.checkBonusLife();
       this.handlingWin = true;
       this.lives += 1;
       this.level += 1;
+      document.getElementById("percent").innerHTML = `Progress: ${Math.floor(this.percent)}/75%`;
       this.percent = 0;
       document.getElementById("congrats").innerHTML = "Congrats! You won the level!";
       document.getElementById("level").innerHTML = `Level: ${this.level}`;
