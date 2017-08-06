@@ -332,10 +332,11 @@ class Game {
     }
     if (!obj2.edge && obj1.kill && obj2.kill == undefined) {
       obj2.blocked = false;
+      this.percent -= .15;
+      
       let id = obj2.x + "_" + obj2.y;
       this.blocked.delete(id);
       this.squares[id].graphics.beginFill(EMPTY_COLOR).drawRect(0, 0, 17, 17);
-      this.percent -= .15;
     }
   }
 
@@ -702,8 +703,10 @@ class Pacman {
     pacman.y = 7.5;
     this.stage.addChild(pacmanContainer);
     this.stage.update();
+
     this.game.pacman = pacman;
     this.pacman = this.game.pacman;
+    
     if (this.game.level == 1) {
       $(document).keydown(function(e) {
         this.handleKeydown(e);
