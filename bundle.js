@@ -578,7 +578,7 @@ class Game {
   }
 
   handleLevelWin() {
-    if (Math.floor(this.percent) >= 20 ) {
+    if (Math.floor(this.percent) >= 75 ) {
       // debugger;
       this.score += Math.min(75 * this.level, 250);
       this.checkBonusLife();
@@ -712,7 +712,7 @@ class Pacman {
 
     this.game.pacman = pacman;
     this.pacman = this.game.pacman;
-    
+
     if (this.game.level == 1) {
       $(document).keydown(function(e) {
         this.handleKeydown(e);
